@@ -1,0 +1,53 @@
+{
+  "name": "letter-95",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "test": "echo \"Warning: no test specified\"",
+    "cspell": "cspell --config cspell.json \"**/*.{ts,tsx,js,jsx,html,json}\" --quiet",
+    "run-eslint": "eslint src --ext ts,tsx,html --report-unused-disable-directives --max-warnings 0",
+    "run-stylelint": "stylelint \"**/*.scss\"",
+    "lint": "yarn run run-eslint && yarn run run-stylelint",
+    "lint-fix": "yarn run run-eslint -- --fix",
+    "preview": "vite preview",
+    "prepare": "husky",
+    "docker-dev-up": "docker-compose -f docker-compose-dev.yaml up -d --build",
+    "docker-up": "docker-compose -f docker-compose.yaml up -d --build",
+    "docker-dev-down": "docker-compose -f docker-compose-dev.yaml down",
+    "docker-down": "docker-compose -f docker-compose.yaml down"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite-tsconfig-paths": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "cspell": "^8.6.0",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5",
+    "sass": "^1.72.0",
+    "stylelint": "^16.3.1",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}
