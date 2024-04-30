@@ -113,6 +113,7 @@
     ],
     "react/no-array-index-key": "off",
     "react/jsx-props-no-spreading": "off",
-    "react/prop-types": [2, { "ignore": ["className"] }]
+    "react/prop-types": [2, { "ignore": ["className"] }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
   }
 }

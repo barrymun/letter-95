@@ -20,11 +20,11 @@
     "docker-down": "docker-compose -f docker-compose.yaml down"
   },
   "dependencies": {
+    "quill": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react95": "^4.0.0",
-    "styled-components": "^6.1.8",
-    "vite-tsconfig-paths": "^4.3.2"
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
@@ -50,6 +50,7 @@
     "stylelint": "^16.3.1",
     "stylelint-config-standard-scss": "^13.1.0",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }

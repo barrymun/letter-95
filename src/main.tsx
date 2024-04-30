@@ -1,4 +1,5 @@
 import "./index.scss";
+import "quill/dist/quill.snow.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
