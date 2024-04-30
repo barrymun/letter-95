@@ -1,10 +1,12 @@
-import Quill from "quill/core";
+import Quill from "quill";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
 import { FC, useEffect, useRef } from "react";
+
+import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
 
 Quill.register({
   "modules/toolbar": Toolbar,
@@ -17,7 +19,8 @@ Quill.register({
 interface RichTextEditorProps {}
 
 const RichTextEditor: FC<RichTextEditorProps> = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const toolbarRef = useRef<HTMLDivElement | null>(null);
+  const editorRef = useRef<HTMLDivElement | null>(null);
 
   // useEffect(() => {
   //   if (ref.current) {
@@ -25,17 +28,36 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   //   }
   // }, []);
 
+  // const modules = useMemo(() => {
+  //   return {
+  //     toolbar: {
+  //       container: toolbarRef.current,
+  //     },
+  //   };
+  // }, [toolbarRef]);
+
   useEffect(() => {
-    if (!ref?.current || ref?.current?.classList.contains("ql-container")) {
+    if (!editorRef?.current || editorRef?.current?.classList.contains("ql-container")) {
       return;
     }
     // eslint-disable-next-line no-new
-    new Quill(ref?.current, {
+    new Quill(editorRef.current, {
       theme: "snow",
+      modules: {
+        toolbar: {
+          container: toolbarRef.current,
+        },
+      },
     });
-  }, [ref?.current]);
+  }, [editorRef?.current, toolbarRef?.current]);
 
-  return <div ref={ref} />;
+  return (
+    <>
+      <CustomToolbar ref={toolbarRef} />
+      {/* {!!toolbarRef.current && <div ref={editorRef} />} */}
+      <div ref={editorRef} />
+    </>
+  );
 };
 
 export { RichTextEditor };
