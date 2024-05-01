@@ -1,3 +1,5 @@
+import "./rich-text-editor.scss";
+
 import Quill from "quill";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
@@ -28,16 +30,11 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   //   }
   // }, []);
 
-  // const modules = useMemo(() => {
-  //   return {
-  //     toolbar: {
-  //       container: toolbarRef.current,
-  //     },
-  //   };
-  // }, [toolbarRef]);
-
   useEffect(() => {
-    if (!editorRef?.current || editorRef?.current?.classList.contains("ql-container")) {
+    if (!editorRef?.current) {
+      return;
+    }
+    if (editorRef.current.classList.contains("ql-container")) {
       return;
     }
     // eslint-disable-next-line no-new
@@ -49,14 +46,13 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
         },
       },
     });
-  }, [editorRef?.current, toolbarRef?.current]);
+  }, [editorRef]);
 
   return (
-    <>
+    <div className="rich-text-editor">
       <CustomToolbar ref={toolbarRef} />
-      {/* {!!toolbarRef.current && <div ref={editorRef} />} */}
       <div ref={editorRef} />
-    </>
+    </div>
   );
 };
 
