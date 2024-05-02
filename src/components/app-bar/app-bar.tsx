@@ -8,7 +8,7 @@ interface AppBarProps {}
 const AppBar: FC<AppBarProps> = () => {
   return (
     <div className="app-bar">
-      <R95AppBar>HERE</R95AppBar>
+      <R95AppBar>Here</R95AppBar>
     </div>
   );
 };

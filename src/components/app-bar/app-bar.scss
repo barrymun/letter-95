@@ -1,5 +1,7 @@
+@import './src/assets/scss/variables';
+
 .app-bar {
-  height: 40px;
+  height: $app-bar-height;
 
   header {
     height: inherit;

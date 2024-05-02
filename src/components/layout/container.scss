@@ -1,0 +1,13 @@
+@import './src/assets/scss/variables';
+
+.container {
+  height: calc(100vh - $app-bar-height);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 15px;
+  box-sizing: border-box;
+ 
+  @media (width >= 768px) {
+    padding: 30px;
+  }
+}
