@@ -6,7 +6,7 @@ import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
 
@@ -24,11 +24,13 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   const toolbarRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
 
-  // useEffect(() => {
-  //   if (ref.current) {
-  //     ref.current.focus();
-  //   }
-  // }, []);
+  const [quill, setQuill] = useState<Quill | null>(null);
+
+  useEffect(() => {
+    if (quill) {
+      quill.focus();
+    }
+  }, [quill]);
 
   useEffect(() => {
     if (!editorRef?.current) {
@@ -37,15 +39,16 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     if (editorRef.current.classList.contains("ql-container")) {
       return;
     }
-    // eslint-disable-next-line no-new
-    new Quill(editorRef.current, {
-      theme: "snow",
-      modules: {
-        toolbar: {
-          container: toolbarRef.current,
+    setQuill(
+      new Quill(editorRef.current, {
+        theme: "snow",
+        modules: {
+          toolbar: {
+            container: toolbarRef.current,
+          },
         },
-      },
-    });
+      }),
+    );
   }, [editorRef]);
 
   return (
