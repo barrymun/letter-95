@@ -4,7 +4,7 @@ import { ThemeProvider } from "styled-components";
 
 import { AppBar } from "components/app-bar";
 import { GlobalStyles } from "components/global-styles";
-import { Container } from "components/layout";
+import { Container, Layout } from "components/layout";
 import { RichTextEditor } from "components/rich-text-editor";
 
 interface AppProps {}
@@ -14,10 +14,12 @@ const App: FC<AppProps> = () => {
     <>
       <GlobalStyles />
       <ThemeProvider theme={original}>
-        <AppBar />
-        <Container>
-          <RichTextEditor />
-        </Container>
+        <Layout>
+          <AppBar />
+          <Container>
+            <RichTextEditor />
+          </Container>
+        </Layout>
       </ThemeProvider>
     </>
   );

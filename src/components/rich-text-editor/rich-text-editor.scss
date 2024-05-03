@@ -1,5 +1,9 @@
+@import './src/assets/scss/variables';
+
 .rich-text-editor {
   .ql-editor {
+    background-color: $surface-primary;
+
     strong {
       font-weight: bold;
     }
