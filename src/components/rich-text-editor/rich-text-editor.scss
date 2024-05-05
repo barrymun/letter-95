@@ -2,14 +2,15 @@
 
 .rich-text-editor {
   width: $page-width;
+  min-height: $page-height;
 
   .ql-container {
-    height: inherit;
+    // height: inherit;
+    // height: calc(100% - $app-bar-height);
 
     .ql-editor {
       background-color: $surface-primary;
-      min-height: $page-height;  
-  
+
       strong {
         font-weight: bold;
       }
@@ -18,5 +19,16 @@
         font-style: italic;
       }
     }
+  }
+}
+
+.rich-text-editor::after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 15px;
+
+  @media (width >= 768px) {
+    height: 30px;
   }
 }
