@@ -2,10 +2,12 @@
 
 .container {
   height: calc(100vh - $app-bar-height);
-  max-width: 900px;
+  overflow-y: auto;
   margin: 0 auto;
   padding: 15px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
  
   @media (width >= 768px) {
     padding: 30px;

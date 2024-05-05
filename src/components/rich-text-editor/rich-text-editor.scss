@@ -1,15 +1,22 @@
 @import './src/assets/scss/variables';
 
 .rich-text-editor {
-  .ql-editor {
-    background-color: $surface-primary;
+  width: $page-width;
 
-    strong {
-      font-weight: bold;
-    }
+  .ql-container {
+    height: inherit;
 
-    em {
-      font-style: italic;
+    .ql-editor {
+      background-color: $surface-primary;
+      min-height: $page-height;  
+  
+      strong {
+        font-weight: bold;
+      }
+  
+      em {
+        font-style: italic;
+      }
     }
   }
 }
