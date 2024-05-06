@@ -5,8 +5,7 @@
   min-height: $page-height;
 
   .ql-container {
-    // height: inherit;
-    // height: calc(100% - $app-bar-height);
+    font-size: 18px;
 
     .ql-editor {
       background-color: $surface-primary;

@@ -18,6 +18,12 @@ Quill.register({
   "formats/header": Header,
 });
 
+// use 'div' instead of 'p' for block elements
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Block: any = Quill.import("blots/block");
+Block.tagName = "DIV";
+Quill.register(Block, true);
+
 interface RichTextEditorProps {}
 
 const RichTextEditor: FC<RichTextEditorProps> = () => {
