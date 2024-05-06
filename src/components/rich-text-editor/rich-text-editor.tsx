@@ -1,14 +1,16 @@
 import "./rich-text-editor.scss";
 
-import Quill from "quill";
+import Quill, { Range } from "quill";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
+import { Context } from "quill/modules/keyboard";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
+import { Keys } from "utils/quill";
 
 Quill.register({
   "modules/toolbar": Toolbar,
@@ -51,6 +53,16 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
         modules: {
           toolbar: {
             container: toolbarRef.current,
+          },
+          keyboard: {
+            bindings: {
+              tab: {
+                key: Keys.TAB,
+                handler(_range: Range, _context: Context) {
+                  return true;
+                },
+              },
+            },
           },
         },
       }),
