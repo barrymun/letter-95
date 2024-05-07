@@ -1,16 +1,15 @@
 import "./rich-text-editor.scss";
 
-import Quill, { Range } from "quill";
+import Quill from "quill";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
-import { Context } from "quill/modules/keyboard";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
-import { Keys } from "utils/quill";
+import { CustomTab } from "utils/quill/modules/custom-tab";
 
 Quill.register({
   "modules/toolbar": Toolbar,
@@ -19,6 +18,8 @@ Quill.register({
   "formats/italic": Italic,
   "formats/header": Header,
 });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Quill.register("modules/custom-tab", CustomTab as any);
 
 // use 'div' instead of 'p' for block elements
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,12 +36,6 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   const [quill, setQuill] = useState<Quill | null>(null);
 
   useEffect(() => {
-    if (quill) {
-      quill.focus();
-    }
-  }, [quill]);
-
-  useEffect(() => {
     if (!editorRef?.current) {
       return;
     }
@@ -54,20 +49,17 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
           toolbar: {
             container: toolbarRef.current,
           },
-          keyboard: {
-            bindings: {
-              tab: {
-                key: Keys.TAB,
-                handler(_range: Range, _context: Context) {
-                  return true;
-                },
-              },
-            },
-          },
+          "custom-tab": {},
         },
       }),
     );
   }, [editorRef]);
+
+  useEffect(() => {
+    if (quill) {
+      quill.focus();
+    }
+  }, [quill]);
 
   return (
     <div className="rich-text-editor">
