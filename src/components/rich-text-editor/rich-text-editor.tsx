@@ -10,6 +10,7 @@ import { FC, useEffect, useRef, useState } from "react";
 
 import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
 import { CustomTab } from "utils/quill/modules/custom-tab";
+import { Mention } from "utils/quill/modules/mention";
 
 Quill.register({
   "modules/toolbar": Toolbar,
@@ -20,6 +21,8 @@ Quill.register({
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Quill.register("modules/custom-tab", CustomTab as any);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Quill.register("modules/mention", Mention as any);
 
 // use 'div' instead of 'p' for block elements
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,6 +53,10 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
             container: toolbarRef.current,
           },
           "custom-tab": {},
+          mention: {
+            data: [],
+            editorLeftOffset: 0,
+          },
         },
       }),
     );
@@ -59,6 +66,31 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     if (quill) {
       quill.focus();
     }
+  }, [quill]);
+
+  useEffect(() => {
+    const mentionModule: Mention | undefined = quill?.getModule("mention") as Mention | undefined;
+    if (!mentionModule) {
+      return;
+    }
+    mentionModule.data = [
+      {
+        value: "1",
+        label: "John Doe",
+      },
+      {
+        value: "2",
+        label: "Jane Doe",
+      },
+      {
+        value: "3",
+        label: "John Smith",
+      },
+      {
+        value: "4",
+        label: "Jane Smith",
+      },
+    ];
   }, [quill]);
 
   return (

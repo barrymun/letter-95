@@ -10,3 +10,9 @@ export enum Keys137 {
   DOWN = 40,
   DELETE = 46,
 }
+
+export interface MenuOption {
+  label: string;
+  value: string;
+  description?: string;
+}

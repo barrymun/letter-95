@@ -1,0 +1,38 @@
+@import '/src/assets/scss/variables';
+
+$menu-item-height: 45px;
+
+.menu {
+  position: absolute;
+  z-index: 9999;
+  background-color: $surface-primary;
+  border: 1px solid $neutral-500;
+  border-radius: 4px;
+  overflow: auto;
+  display: none;
+  grid-template-rows: repeat(auto-fill, minmax($menu-item-height, 1fr));
+
+  > div {
+    padding: 2px 4px;
+    height: $menu-item-height;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // stylelint-disable-next-line declaration-no-important
+    line-height: 18px !important;
+
+    .label {
+      font-size: 14px;
+    }
+
+    .description {
+      font-size: 12px;
+      color: $text-secondary;
+    }
+  }
+
+  .active {
+    cursor: pointer;
+    background-color: $neutral-500;
+  }
+}

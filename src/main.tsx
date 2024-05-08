@@ -1,5 +1,7 @@
 import "./index.scss";
 import "quill/dist/quill.snow.css";
+import "utils/quill/modules/menu.scss";
+import "utils/quill/modules/mention/mention.scss";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
