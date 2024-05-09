@@ -12,10 +12,10 @@ const CustomToolbar = forwardRef((_props: CustomToolbarProps, ref: ForwardedRef<
         <button type="button" className="ql-header" value="1" />
         <button type="button" className="ql-header" value="2" />
         {/* the following require custom icons */}
-        {/* <button type="button" className="ql-header" value="3" />
-        <button type="button" className="ql-header" value="4" />
-        <button type="button" className="ql-header" value="5" />
-        <button type="button" className="ql-header" value="6" /> */}
+        {/* <button type="button" className="ql-header" value="3" /> */}
+        {/* <button type="button" className="ql-header" value="4" /> */}
+        {/* <button type="button" className="ql-header" value="5" /> */}
+        {/* <button type="button" className="ql-header" value="6" /> */}
       </span>
       <span className="ql-formats">
         <button type="button" className="ql-bold" />
@@ -45,7 +45,7 @@ const CustomToolbar = forwardRef((_props: CustomToolbarProps, ref: ForwardedRef<
       <span className="ql-formats">
         <button type="button" className="ql-link" />
         <button type="button" className="ql-image" />
-        <button type="button" className="ql-video" />
+        {/* <button type="button" className="ql-video" /> */}
       </span>
     </div>
   );

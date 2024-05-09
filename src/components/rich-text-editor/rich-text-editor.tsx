@@ -1,7 +1,9 @@
 import "./rich-text-editor.scss";
 
 import emojiData, { EmojiMartData } from "@emoji-mart/data";
+import { omit } from "lodash";
 import Quill from "quill";
+import { Delta, Op } from "quill/core";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
@@ -10,6 +12,8 @@ import Snow from "quill/themes/snow";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
+import { extractMentionedUsers } from "utils";
+import { MenuOption } from "utils/quill";
 import { CustomEmoji } from "utils/quill/modules/custom-emoji";
 import { CustomTab } from "utils/quill/modules/custom-tab";
 import { Mention } from "utils/quill/modules/mention";
@@ -93,6 +97,47 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     if (quill) {
       quill.focus();
     }
+  }, [quill]);
+
+  /**
+   * remove unwanted formatting on paste
+   */
+  useEffect(() => {
+    if (!quill) {
+      return;
+    }
+    quill.clipboard?.addMatcher?.(Node.ELEMENT_NODE, (_node: Node, delta: Delta) => {
+      // eslint-disable-next-line no-param-reassign
+      delta.ops = delta.ops.map((op: Op) => {
+        // omit unwanted attributes
+        if (op.attributes) {
+          const newAttributes = omit(op.attributes, [
+            "color",
+            "background",
+            "align",
+            "header",
+            "code",
+            "contenteditable",
+            "code-block",
+          ]);
+          return { ...op, attributes: newAttributes };
+        }
+        // check if the user is trying to paste a mention that already exists
+        if (op.insert && (op.insert as { mention?: MenuOption })?.mention) {
+          const mentionedUsers = extractMentionedUsers(quill.root.innerHTML ?? "");
+          const value = parseInt((op.insert as { mention: MenuOption }).mention.value, 10);
+          if (mentionedUsers.includes(value)) {
+            return { insert: "" };
+          }
+        }
+        return op;
+      });
+      return delta;
+    });
+    quill.clipboard?.addMatcher?.("VIDEO", (_node: Node, _delta: Delta) => {
+      const delta = new Delta();
+      return delta;
+    });
   }, [quill]);
 
   useEffect(() => {
