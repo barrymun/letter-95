@@ -149,7 +149,7 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   }, [quill]);
 
   useEffect(() => {
-    const customEmojiModule: Mention | undefined = quill?.getModule("custom-emoji") as Mention | undefined;
+    const customEmojiModule: CustomEmoji | undefined = quill?.getModule("custom-emoji") as CustomEmoji | undefined;
     if (!customEmojiModule) {
       return;
     }
