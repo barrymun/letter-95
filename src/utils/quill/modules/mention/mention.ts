@@ -1,7 +1,7 @@
 import Quill, { QuillOptions, Range } from "quill";
 import { Delta } from "quill/core";
 
-import { extractMentionedUsers } from "utils";
+import { appBarHeight, extractMentionedUsers } from "utils";
 import { menuClassName } from "utils/quill";
 import { MentionBlot } from "utils/quill/modules/mention/blot";
 import { blotName, triggerCharacter } from "utils/quill/modules/mention/consts";
@@ -261,7 +261,6 @@ export class Mention {
    */
   setMenuPosition() {
     const editorWidth = this.quill.root.offsetWidth;
-    const editorHeight = this.quill.root.offsetHeight;
     const bounds = this.getBounds();
     const editorRect = this.quill.root.getBoundingClientRect();
 
@@ -271,10 +270,10 @@ export class Mention {
       this.menuLeft = bounds.left;
     }
 
-    const menuBottom = editorRect.top + editorHeight + this.menuHeight;
+    const menuBottom = bounds.top + editorRect.top + this.menuHeight + appBarHeight;
 
     if (menuBottom > window.innerHeight) {
-      this.menuTop = bounds.top - this.menuHeight + this.menuBottomOffset;
+      this.menuTop = bounds.top - this.menuHeight - this.menuBottomOffset;
     } else {
       this.menuTop = bounds.top + this.menuTopOffset;
     }
