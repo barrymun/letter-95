@@ -12,6 +12,11 @@ import { MenuOption } from "utils/quill/types";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Quill.register("blots/mention", MentionBlot as any);
 
+const scrollOpts: ScrollIntoViewOptions = {
+  behavior: "instant",
+  block: "nearest",
+};
+
 export class Mention {
   readonly menuTopOffset: number = 34;
 
@@ -62,6 +67,8 @@ export class Mention {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
     this.selectHandler = this.selectHandler.bind(this);
+    this.downHandler = this.downHandler.bind(this);
+    this.upHandler = this.upHandler.bind(this);
 
     this.quill = quill;
 
@@ -75,6 +82,9 @@ export class Mention {
 
     this.quill.keyboard.addBinding({ key: "Tab" }, this.selectHandler.bind(this));
     this.quill.keyboard.bindings.Tab.unshift(this.quill.keyboard.bindings.Tab.pop()!);
+
+    this.quill.keyboard.addBinding({ key: "ArrowDown" }, this.downHandler.bind(this));
+    this.quill.keyboard.addBinding({ key: "ArrowUp" }, this.upHandler.bind(this));
   }
 
   getBounds() {
@@ -342,14 +352,60 @@ export class Mention {
       return true; // use default key bindings
     }
     if (this.selectedIndex === null) {
-      return true;
+      return true; // use default key bindings
     }
     const filteredData = this.getFilteredData();
     if (filteredData.length < this.selectedIndex - 1) {
-      return true;
+      return true; // use default key bindings
     }
     const datum = filteredData[this.selectedIndex];
     this.insertItem(datum);
+    return false;
+  }
+
+  downHandler() {
+    if (!this.isMenuOpen()) {
+      return true; // use default key bindings
+    }
+    if (this.menu.childNodes.length === 0) {
+      this.selectedIndex = null;
+      return true; // use default key bindings
+    }
+    if (this.selectedIndex === null || this.selectedIndex === this.menu.childNodes.length - 1) {
+      if (this.selectedIndex !== null) {
+        (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.remove("active");
+      }
+      this.selectedIndex = 0;
+      (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.add("active");
+    } else {
+      (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.remove("active");
+      this.selectedIndex += 1;
+      (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.add("active");
+    }
+    (this.menu.childNodes[this.selectedIndex] as HTMLElement).scrollIntoView(scrollOpts);
+    return false;
+  }
+
+  upHandler() {
+    if (!this.isMenuOpen()) {
+      return true; // use default key bindings
+    }
+    if (this.menu.childNodes.length === 0) {
+      this.selectedIndex = null;
+      return true; // use default key bindings
+    }
+    if (this.selectedIndex === null || this.selectedIndex === 0) {
+      if (this.selectedIndex !== null) {
+        (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.remove("active");
+      }
+      this.selectedIndex = this.menu.childNodes.length - 1;
+      (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.add("active");
+    } else {
+      (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.remove("active");
+      this.selectedIndex -= 1;
+      (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.add("active");
+    }
+    (this.menu.childNodes[this.selectedIndex] as HTMLElement).scrollIntoView(scrollOpts);
     return false;
   }
 }
