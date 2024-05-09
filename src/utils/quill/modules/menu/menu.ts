@@ -1,5 +1,4 @@
-import Quill, { QuillOptions, Range } from "quill";
-import { Delta } from "quill/core";
+import Quill, { Delta, QuillOptions, Range } from "quill/core";
 
 import { appBarHeight } from "utils";
 import { menuClassName } from "utils/quill";

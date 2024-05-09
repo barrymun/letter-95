@@ -1,4 +1,4 @@
-import Quill from "quill";
+import Quill from "quill/core";
 
 import { extractMentionedUsers } from "utils/helpers";
 import { MentionBlot } from "utils/quill/modules/mention/blot";

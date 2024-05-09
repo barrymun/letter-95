@@ -1,4 +1,4 @@
-import Quill from "quill";
+import Quill from "quill/core";
 
 import { triggerCharacter } from "utils/quill/modules/custom-emoji/consts";
 import { Menu } from "utils/quill/modules/menu/menu";

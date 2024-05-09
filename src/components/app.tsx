@@ -1,11 +1,12 @@
-import { FC } from "react";
+import { FC, Suspense, lazy } from "react";
 import original from "react95/dist/themes/original";
 import { ThemeProvider } from "styled-components";
 
 import { AppBar } from "components/app-bar";
 import { GlobalStyles } from "components/global-styles";
 import { Container, Layout } from "components/layout";
-import { RichTextEditor } from "components/rich-text-editor";
+
+const RichTextEditor = lazy(() => import("components/rich-text-editor/rich-text-editor"));
 
 interface AppProps {}
 
@@ -17,7 +18,9 @@ const App: FC<AppProps> = () => {
         <Layout>
           <AppBar />
           <Container>
-            <RichTextEditor />
+            <Suspense>
+              <RichTextEditor />
+            </Suspense>
           </Container>
         </Layout>
       </ThemeProvider>

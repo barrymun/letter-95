@@ -167,4 +167,4 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   );
 };
 
-export { RichTextEditor };
+export default RichTextEditor;
