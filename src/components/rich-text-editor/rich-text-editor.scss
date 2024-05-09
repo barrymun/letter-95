@@ -2,6 +2,7 @@
 
 .rich-text-editor {
   width: $page-width;
+  max-width: 100%;
   min-height: $page-height;
 
   .ql-container {

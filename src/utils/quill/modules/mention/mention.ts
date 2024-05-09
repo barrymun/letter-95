@@ -263,7 +263,7 @@ export class Mention {
     const editorWidth = this.quill.root.offsetWidth;
     const editorHeight = this.quill.root.offsetHeight;
     const bounds = this.getBounds();
-    const editorRect: DOMRect = this.quill.root.getBoundingClientRect();
+    const editorRect = this.quill.root.getBoundingClientRect();
 
     if (editorWidth < bounds.left + this.menuWidth - this.menuWidthOffset - this.editorLeftOffset) {
       this.menuLeft = bounds.left - this.menuWidth;
