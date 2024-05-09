@@ -1,36 +1,35 @@
 import "./rich-text-editor.scss";
 
 import emojiData, { EmojiMartData } from "@emoji-mart/data";
-import { omit } from "lodash";
-import Quill from "quill";
-import { Delta, Op } from "quill/core";
+import omit from "lodash/omit";
+import Quill, { Delta, Op } from "quill/core";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Suspense, lazy, useEffect, useRef, useState } from "react";
 
-import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
 import { extractMentionedUsers } from "utils";
 import { MenuOption } from "utils/quill";
 import { CustomEmoji } from "utils/quill/modules/custom-emoji";
 import { CustomTab } from "utils/quill/modules/custom-tab";
 import { Mention } from "utils/quill/modules/mention";
 
+const CustomToolbar = lazy(() => import("components/rich-text-editor/custom-toolbar"));
+
 Quill.register({
-  "modules/toolbar": Toolbar,
   "themes/snow": Snow,
   "formats/bold": Bold,
   "formats/italic": Italic,
   "formats/header": Header,
+  "modules/toolbar": Toolbar,
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  "modules/custom-tab": CustomTab as any,
+  "modules/mention": Mention as any,
+  "modules/custom-emoji": CustomEmoji as any,
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-Quill.register("modules/custom-tab", CustomTab as any);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-Quill.register("modules/mention", Mention as any);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-Quill.register("modules/custom-emoji", CustomEmoji as any);
 
 // use 'div' instead of 'p' for block elements
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -161,7 +160,9 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
 
   return (
     <div className="rich-text-editor">
-      <CustomToolbar ref={toolbarRef} />
+      <Suspense>
+        <CustomToolbar ref={toolbarRef} />
+      </Suspense>
       <div ref={editorRef} />
     </div>
   );

@@ -51,4 +51,4 @@ const CustomToolbar = forwardRef((_props: CustomToolbarProps, ref: ForwardedRef<
   );
 });
 
-export { CustomToolbar };
+export default CustomToolbar;
