@@ -12,7 +12,7 @@ export enum Keys137 {
 }
 
 export interface MenuOption {
-  label: string;
   value: string;
+  label: string;
   description?: string;
 }

@@ -6,6 +6,7 @@ import { menuClassName } from "utils/quill";
 import { MentionBlot } from "utils/quill/modules/mention/blot";
 import { blotName, triggerCharacter } from "utils/quill/modules/mention/consts";
 import { containsSpecialChars, countWhiteSpaces, getLastWord } from "utils/quill/modules/mention/helpers";
+import { MentionEmbed } from "utils/quill/modules/mention/types";
 import { MenuOption } from "utils/quill/types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -145,7 +146,8 @@ export class Mention {
       return;
     }
     this.preInsert();
-    this.quill.insertEmbed(this.insertAtPosition.index, blotName, option, Quill.sources.USER);
+    const embed: MentionEmbed = { ...option, triggerCharacter: this.triggerCharacter };
+    this.quill.insertEmbed(this.insertAtPosition.index, blotName, embed, Quill.sources.USER);
     this.quill.insertText(this.insertAtPosition.index + 1, " ", Quill.sources.USER); // adding a space after insertion
     this.quill.setSelection(this.insertAtPosition.index + 2, Quill.sources.USER); // set the cursor after the space
     this.postInsert();
