@@ -1,5 +1,6 @@
 import "./rich-text-editor.scss";
 
+import emojiData, { EmojiMartData } from "@emoji-mart/data";
 import Quill from "quill";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
@@ -9,6 +10,7 @@ import Snow from "quill/themes/snow";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { CustomToolbar } from "components/rich-text-editor/custom-toolbar";
+import { CustomEmoji } from "utils/quill/modules/custom-emoji";
 import { CustomTab } from "utils/quill/modules/custom-tab";
 import { Mention } from "utils/quill/modules/mention";
 
@@ -23,12 +25,33 @@ Quill.register({
 Quill.register("modules/custom-tab", CustomTab as any);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Quill.register("modules/mention", Mention as any);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Quill.register("modules/custom-emoji", CustomEmoji as any);
 
 // use 'div' instead of 'p' for block elements
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Block: any = Quill.import("blots/block");
 Block.tagName = "DIV";
 Quill.register(Block, true);
+
+const mentionData = [
+  {
+    value: "1",
+    label: "John Doe",
+  },
+  {
+    value: "2",
+    label: "Jane Doe",
+  },
+  {
+    value: "3",
+    label: "John Smith",
+  },
+  {
+    value: "4",
+    label: "Jane Smith",
+  },
+];
 
 interface RichTextEditorProps {}
 
@@ -57,6 +80,10 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
             data: [],
             editorLeftOffset: 0,
           },
+          "custom-emoji": {
+            data: [],
+            editorLeftOffset: 0,
+          },
         },
       }),
     );
@@ -73,24 +100,18 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     if (!mentionModule) {
       return;
     }
-    mentionModule.data = [
-      {
-        value: "1",
-        label: "John Doe",
-      },
-      {
-        value: "2",
-        label: "Jane Doe",
-      },
-      {
-        value: "3",
-        label: "John Smith",
-      },
-      {
-        value: "4",
-        label: "Jane Smith",
-      },
-    ];
+    mentionModule.data = mentionData;
+  }, [quill]);
+
+  useEffect(() => {
+    const customEmojiModule: Mention | undefined = quill?.getModule("custom-emoji") as Mention | undefined;
+    if (!customEmojiModule) {
+      return;
+    }
+    customEmojiModule.data = Object.entries((emojiData as EmojiMartData).emojis).map(([name, emoji]) => ({
+      value: emoji.skins?.[0].native ?? "",
+      label: `${emoji.skins?.[0].native ?? ""} ${name} `,
+    }));
   }, [quill]);
 
   return (
