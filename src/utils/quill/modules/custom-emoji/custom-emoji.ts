@@ -16,7 +16,7 @@ export class CustomEmoji extends Menu {
       return;
     }
     this.preInsert();
-    const textToInsert = `${option.value} `;
+    const textToInsert = option.value;
     this.quill.insertText(this.insertAtPosition.index, textToInsert);
     this.quill.setSelection(this.insertAtPosition.index + textToInsert.length, Quill.sources.USER);
     this.postInsert();

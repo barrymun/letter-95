@@ -183,10 +183,10 @@ export abstract class Menu {
 
     for (const [index, datum] of filteredData.entries()) {
       const div = document.createElement("div");
-      if ((datum as unknown as MenuOption).description) {
+      if (datum.description) {
         div.innerHTML = `
           <span class="label">${datum.label}</span>
-          <span class="description">${(datum as unknown as MenuOption).description}</span>
+          <span class="description">${datum.description}</span>
         `;
       } else {
         div.innerText = datum.label;

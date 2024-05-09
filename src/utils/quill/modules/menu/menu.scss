@@ -11,6 +11,8 @@ $menu-item-height: 45px;
   overflow: auto;
   display: none;
   grid-template-rows: repeat(auto-fill, minmax($menu-item-height, 1fr));
+  white-space: nowrap;
+  font-size: 14px;
 
   > div {
     padding: 2px 4px;
