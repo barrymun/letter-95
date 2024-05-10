@@ -1,14 +1,14 @@
-import Quill from "quill";
+import Quill from "quill"; // importing from quill/core here partially breaks the toolbar for some reason
+import QuillEmbed from "quill/blots/embed";
 
 import { blotName, className, tagName } from "utils/quill/modules/mention/consts";
 import { MentionEmbed } from "utils/quill/modules/mention/types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Embed: any = Quill.import("blots/embed");
+const Embed = Quill.import("blots/embed") as typeof QuillEmbed;
 
 export class MentionBlot extends Embed {
   static create(data: MentionEmbed) {
-    const node = super.create();
+    const node = super.create() as HTMLElement;
     let text: string;
     if (data.triggerCharacter) {
       text = `${data.triggerCharacter}${data.label}`;
@@ -24,24 +24,23 @@ export class MentionBlot extends Embed {
   static value(node: HTMLElement): MentionEmbed {
     return {
       label: node.innerText,
-      value: node.getAttribute("data-value")!,
+      value: node.getAttribute("data-value") ?? "",
     };
   }
 
   /**
    * modification to handle embed blot not being deleted properly on android
    * thread: https://github.com/quilljs/quill/issues/1985
+   * function types code: https://github.com/quilljs/quill/blob/main/packages/quill/src/blots/embed.ts#L79
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update(mutations: any, context: any) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mutations.forEach((mutation: any) => {
+  update(mutations: MutationRecord[], context: Record<string, unknown>) {
+    mutations.forEach((mutation) => {
       if (
         mutation.type === "childList" &&
         (Array.from(mutation.removedNodes).includes(this.leftGuard) ||
           Array.from(mutation.removedNodes).includes(this.rightGuard))
       ) {
-        if (mutation.target?.classList?.contains(blotName)) {
+        if ((mutation.target as HTMLElement | null)?.classList?.contains(blotName)) {
           super.replaceWith("text", "");
         }
       }

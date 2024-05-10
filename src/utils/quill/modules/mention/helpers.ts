@@ -16,7 +16,7 @@ export function countWhiteSpaces(str: string) {
 }
 
 /**
- * hide the menu if any of these special chars are typed or if any numbers are typed
+ * hide the menu if one of these special chars are typed
  */
 export function containsSpecialChars(str: string) {
   const specialCharsRegex = /[?!,.()\d]/;

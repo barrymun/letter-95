@@ -1,18 +1,18 @@
 /**
- * get any user mentions from a html string
- * return the list of user ids and convert to numbers
+ * get all mentions from a html string
+ * return the mention ids
  */
-export function extractMentionedUsers(htmlString: string): number[] {
+export function extractMentionedUsers(htmlString: string): string[] {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = htmlString;
   // get all the mentions
   const mentionElements = tempDiv.querySelectorAll(".mention");
-  const userIds: number[] = [];
+  const userIds: string[] = [];
   // get the value from the "data-value" attribute
   mentionElements.forEach((element) => {
     const value = element.getAttribute("data-value");
     if (value) {
-      userIds.push(parseInt(value, 10));
+      userIds.push(value);
     }
   });
   return userIds;

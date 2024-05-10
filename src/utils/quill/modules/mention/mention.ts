@@ -7,8 +7,7 @@ import { MentionEmbed } from "utils/quill/modules/mention/types";
 import { Menu } from "utils/quill/modules/menu/menu";
 import { MenuOption } from "utils/quill/types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-Quill.register("blots/mention", MentionBlot as any);
+Quill.register({ "blots/mention": MentionBlot });
 
 export class Mention extends Menu {
   protected triggerCharacter = triggerCharacter;

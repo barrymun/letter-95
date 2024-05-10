@@ -2,6 +2,7 @@ import "./rich-text-editor.scss";
 
 import emojiData, { EmojiMartData } from "@emoji-mart/data";
 import omit from "lodash/omit";
+import QuillBlock from "quill/blots/block";
 import Quill, { Delta, Op } from "quill/core";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
@@ -24,16 +25,13 @@ Quill.register({
   "formats/italic": Italic,
   "formats/header": Header,
   "modules/toolbar": Toolbar,
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  "modules/custom-tab": CustomTab as any,
-  "modules/mention": Mention as any,
-  "modules/custom-emoji": CustomEmoji as any,
-  /* eslint-enable @typescript-eslint/no-explicit-any */
+  "modules/custom-tab": CustomTab,
+  "modules/mention": Mention,
+  "modules/custom-emoji": CustomEmoji,
 });
 
 // use 'div' instead of 'p' for block elements
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Block: any = Quill.import("blots/block");
+const Block = Quill.import("blots/block") as typeof QuillBlock;
 Block.tagName = "DIV";
 Quill.register(Block, true);
 
@@ -124,7 +122,7 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
         // check if the user is trying to paste a mention that already exists
         if (op.insert && (op.insert as { mention?: MenuOption })?.mention) {
           const mentionedUsers = extractMentionedUsers(quill.root.innerHTML ?? "");
-          const value = parseInt((op.insert as { mention: MenuOption }).mention.value, 10);
+          const { value } = (op.insert as { mention: MenuOption }).mention;
           if (mentionedUsers.includes(value)) {
             return { insert: "" };
           }
