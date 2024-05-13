@@ -5,7 +5,7 @@ import { MentionBlot } from "utils/quill/modules/mention/blot";
 import { blotName, triggerCharacter } from "utils/quill/modules/mention/consts";
 import { MentionEmbed } from "utils/quill/modules/mention/types";
 import { Menu } from "utils/quill/modules/menu/menu";
-import { MenuOption } from "utils/quill/types";
+import { MenuOption } from "utils/quill/modules/menu/types";
 
 Quill.register({ "blots/mention": MentionBlot });
 

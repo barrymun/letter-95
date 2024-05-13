@@ -1,10 +1,9 @@
 import "./rich-text-editor.scss";
 
 import emojiData, { EmojiMartData } from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
 import omit from "lodash/omit";
 import QuillBlock from "quill/blots/block";
-import Quill, { Delta, Op, Range } from "quill/core";
+import Quill, { Delta, Op } from "quill/core";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
@@ -13,10 +12,11 @@ import Snow from "quill/themes/snow";
 import { FC, Suspense, lazy, useEffect, useRef, useState } from "react";
 
 import { extractMentionedUsers } from "utils";
-import { MenuOption } from "utils/quill";
 import { CustomEmoji } from "utils/quill/modules/custom-emoji";
+import { CustomEmojiMart } from "utils/quill/modules/custom-emoji-mart";
 import { CustomTab } from "utils/quill/modules/custom-tab";
 import { Mention } from "utils/quill/modules/mention";
+import { MenuOption } from "utils/quill/modules/menu/types";
 
 const CustomToolbar = lazy(() => import("components/rich-text-editor/custom-toolbar"));
 
@@ -29,6 +29,7 @@ Quill.register({
   "modules/custom-tab": CustomTab,
   "modules/mention": Mention,
   "modules/custom-emoji": CustomEmoji,
+  "modules/custom-emoji-mart": CustomEmojiMart,
 });
 
 // use 'div' instead of 'p' for block elements
@@ -36,7 +37,6 @@ const Block = Quill.import("blots/block") as typeof QuillBlock;
 Block.tagName = "DIV";
 Quill.register(Block, true);
 
-const defaultRange: Range = { index: 0, length: 0 };
 const mentionData = [
   {
     value: "1",
@@ -63,48 +63,6 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   const [quill, setQuill] = useState<Quill | null>(null);
-  const [currentRange] = useState<Range>(defaultRange);
-  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
-
-  const displayEmojiMart = () => {
-    setShowEmojiPicker((prevValue) => !prevValue);
-  };
-
-  const handleEmojiSelect = (emoji: { native: string }) => {
-    if (!quill) {
-      return;
-    }
-    const range = quill.getSelection() ?? currentRange;
-    const textToInsert = emoji.native;
-    quill.insertText(range.index, textToInsert);
-    quill.setSelection(range.index + textToInsert.length, 0);
-    setShowEmojiPicker(false);
-  };
-
-  /**
-   * hide the emoji picker if outside click event occurs
-   */
-  const handleClickOutsidePicker = (event: MouseEvent | TouchEvent) => {
-    const target = event.target as Element;
-    // if the target is the emoji picker toggle button then we want to show it
-    if (target.closest(".ql-emoji")) {
-      return;
-    }
-    // hide the picker if it is shown and the user clicks outside of it
-    if (!target.closest(".emoji-picker")) {
-      setShowEmojiPicker(false);
-    }
-  };
-
-  /**
-   * hide the emoji picker if the escape key is pressed
-   */
-  const handleEscapeKeyUp = (event: KeyboardEvent) => {
-    if (event.key !== "Escape") {
-      return;
-    }
-    setShowEmojiPicker(false);
-  };
 
   useEffect(() => {
     if (!editorRef?.current) {
@@ -119,9 +77,6 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
         modules: {
           toolbar: {
             container: toolbarRef.current,
-            handlers: {
-              emoji: displayEmojiMart,
-            },
           },
           "custom-tab": {},
           mention: {
@@ -132,11 +87,15 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
             data: [],
             editorLeftOffset: 0,
           },
+          "custom-emoji-mart": {},
         },
       }),
     );
   }, [editorRef]);
 
+  /**
+   * auto focus the editor
+   */
   useEffect(() => {
     if (quill) {
       quill.focus();
@@ -185,45 +144,28 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   }, [quill]);
 
   useEffect(() => {
-    const mentionModule: Mention | undefined = quill?.getModule("mention") as Mention | undefined;
-    if (!mentionModule) {
+    const module = quill?.getModule("mention") as Mention | undefined;
+    if (!module) {
       return;
     }
-    mentionModule.data = mentionData;
+    module.data = mentionData;
   }, [quill]);
 
   useEffect(() => {
-    const customEmojiModule: CustomEmoji | undefined = quill?.getModule("custom-emoji") as CustomEmoji | undefined;
-    if (!customEmojiModule) {
+    const module = quill?.getModule("custom-emoji") as CustomEmoji | undefined;
+    if (!module) {
       return;
     }
-    customEmojiModule.data = Object.entries((emojiData as EmojiMartData).emojis).map(([name, emoji]) => ({
+    module.data = Object.entries((emojiData as EmojiMartData).emojis).map(([name, emoji]) => ({
       value: emoji.skins?.[0].native ?? "",
       label: `${emoji.skins?.[0].native ?? ""} ${name} `,
     }));
   }, [quill]);
 
-  useEffect(() => {
-    window.addEventListener("click", handleClickOutsidePicker);
-    return () => {
-      window.removeEventListener("click", handleClickOutsidePicker);
-    };
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("keyup", handleEscapeKeyUp);
-    return () => {
-      window.removeEventListener("keyup", handleEscapeKeyUp);
-    };
-  }, []);
-
   return (
     <div className="rich-text-editor">
       <Suspense>
         <CustomToolbar ref={toolbarRef} />
-        <div className={showEmojiPicker ? "emoji-picker" : "emoji-picker-hidden"}>
-          <Picker theme="light" previewPosition="none" data={emojiData} onEmojiSelect={handleEmojiSelect} />
-        </div>
       </Suspense>
       <div ref={editorRef} />
     </div>

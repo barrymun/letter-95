@@ -2,6 +2,7 @@ import "./index.scss";
 import "quill/dist/quill.snow.css";
 import "utils/quill/modules/menu/menu.scss";
 import "utils/quill/modules/mention/mention.scss";
+import "utils/quill/modules/custom-emoji-mart/custom-emoji-mart.scss";
 
 import React from "react";
 import ReactDOM from "react-dom/client";

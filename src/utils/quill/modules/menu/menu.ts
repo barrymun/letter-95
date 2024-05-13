@@ -1,11 +1,11 @@
 import Quill, { Delta, QuillOptions, Range } from "quill/core";
 
 import { appBarHeight } from "utils";
-import { menuClassName } from "utils/quill";
 import { triggerCharacter as emojiTriggerCharacter } from "utils/quill/modules/custom-emoji/consts";
 import { triggerCharacter as mentionTriggerCharacter } from "utils/quill/modules/mention/consts";
-import { containsSpecialChars, countWhiteSpaces, getLastWord } from "utils/quill/modules/mention/helpers";
-import { MenuOption } from "utils/quill/types";
+import { menuClassName } from "utils/quill/modules/menu/consts";
+import { containsSpecialChars, countWhiteSpaces, getLastWord } from "utils/quill/modules/menu/helpers";
+import { MenuOption } from "utils/quill/modules/menu/types";
 
 const scrollOpts: ScrollIntoViewOptions = {
   behavior: "instant",
@@ -253,9 +253,9 @@ export abstract class Menu {
       this.menuLeft = bounds.left;
     }
 
-    const menuBottom = bounds.top + editorRect.top + this.menuHeight + appBarHeight;
+    const bottom = bounds.top + editorRect.top + this.menuHeight + appBarHeight;
 
-    if (menuBottom > window.innerHeight) {
+    if (bottom > window.innerHeight) {
       this.menuTop = bounds.top - this.menuHeight - this.menuBottomOffset;
     } else {
       this.menuTop = bounds.top + this.menuTopOffset;

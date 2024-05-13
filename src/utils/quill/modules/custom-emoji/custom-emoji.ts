@@ -2,7 +2,7 @@ import Quill from "quill/core";
 
 import { triggerCharacter } from "utils/quill/modules/custom-emoji/consts";
 import { Menu } from "utils/quill/modules/menu/menu";
-import { MenuOption } from "utils/quill/types";
+import { MenuOption } from "utils/quill/modules/menu/types";
 
 export class CustomEmoji extends Menu {
   protected triggerCharacter = triggerCharacter;
