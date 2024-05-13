@@ -3,6 +3,8 @@ import "./custom-toolbar.scss";
 
 import { ForwardedRef, forwardRef } from "react";
 
+import { Emoji } from "components/svgs";
+
 interface CustomToolbarProps {}
 
 const CustomToolbar = forwardRef((_props: CustomToolbarProps, ref: ForwardedRef<HTMLDivElement>) => {
@@ -46,6 +48,11 @@ const CustomToolbar = forwardRef((_props: CustomToolbarProps, ref: ForwardedRef<
         <button type="button" className="ql-link" />
         <button type="button" className="ql-image" />
         {/* <button type="button" className="ql-video" /> */}
+      </span>
+      <span className="ql-formats">
+        <button type="button" className="ql-emoji">
+          <Emoji />
+        </button>
       </span>
     </div>
   );

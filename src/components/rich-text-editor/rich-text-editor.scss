@@ -21,6 +21,16 @@
       }
     }
   }
+
+  .emoji-picker {
+    position: absolute;
+    z-index: 1;
+    display: block;
+  }
+
+  .emoji-picker-hidden {
+    display: none;
+  }
 }
 
 .rich-text-editor::after {

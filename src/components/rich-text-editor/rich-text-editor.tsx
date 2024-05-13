@@ -1,9 +1,10 @@
 import "./rich-text-editor.scss";
 
 import emojiData, { EmojiMartData } from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import omit from "lodash/omit";
 import QuillBlock from "quill/blots/block";
-import Quill, { Delta, Op } from "quill/core";
+import Quill, { Delta, Op, Range } from "quill/core";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
@@ -35,6 +36,7 @@ const Block = Quill.import("blots/block") as typeof QuillBlock;
 Block.tagName = "DIV";
 Quill.register(Block, true);
 
+const defaultRange: Range = { index: 0, length: 0 };
 const mentionData = [
   {
     value: "1",
@@ -61,6 +63,48 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   const [quill, setQuill] = useState<Quill | null>(null);
+  const [currentRange] = useState<Range>(defaultRange);
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+
+  const displayEmojiMart = () => {
+    setShowEmojiPicker((prevValue) => !prevValue);
+  };
+
+  const handleEmojiSelect = (emoji: { native: string }) => {
+    if (!quill) {
+      return;
+    }
+    const range = quill.getSelection() ?? currentRange;
+    const textToInsert = emoji.native;
+    quill.insertText(range.index, textToInsert);
+    quill.setSelection(range.index + textToInsert.length, 0);
+    setShowEmojiPicker(false);
+  };
+
+  /**
+   * hide the emoji picker if outside click event occurs
+   */
+  const handleClickOutsidePicker = (event: MouseEvent | TouchEvent) => {
+    const target = event.target as Element;
+    // if the target is the emoji picker toggle button then we want to show it
+    if (target.closest(".ql-emoji")) {
+      return;
+    }
+    // hide the picker if it is shown and the user clicks outside of it
+    if (!target.closest(".emoji-picker")) {
+      setShowEmojiPicker(false);
+    }
+  };
+
+  /**
+   * hide the emoji picker if the escape key is pressed
+   */
+  const handleEscapeKeyUp = (event: KeyboardEvent) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+    setShowEmojiPicker(false);
+  };
 
   useEffect(() => {
     if (!editorRef?.current) {
@@ -75,6 +119,9 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
         modules: {
           toolbar: {
             container: toolbarRef.current,
+            handlers: {
+              emoji: displayEmojiMart,
+            },
           },
           "custom-tab": {},
           mention: {
@@ -156,10 +203,27 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     }));
   }, [quill]);
 
+  useEffect(() => {
+    window.addEventListener("click", handleClickOutsidePicker);
+    return () => {
+      window.removeEventListener("click", handleClickOutsidePicker);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keyup", handleEscapeKeyUp);
+    return () => {
+      window.removeEventListener("keyup", handleEscapeKeyUp);
+    };
+  }, []);
+
   return (
     <div className="rich-text-editor">
       <Suspense>
         <CustomToolbar ref={toolbarRef} />
+        <div className={showEmojiPicker ? "emoji-picker" : "emoji-picker-hidden"}>
+          <Picker theme="light" previewPosition="none" data={emojiData} onEmojiSelect={handleEmojiSelect} />
+        </div>
       </Suspense>
       <div ref={editorRef} />
     </div>
