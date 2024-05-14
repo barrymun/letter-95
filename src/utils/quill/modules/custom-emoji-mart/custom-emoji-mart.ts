@@ -10,11 +10,11 @@ export class CustomEmojiMart {
 
   readonly pickerBottomOffset: number = 6;
 
-  readonly pickerWidth: number = 160;
+  readonly pickerWidth: number = 352;
 
   readonly pickerWidthOffset: number = 15; // additional offset to account for viewport padding
 
-  readonly pickerHeight: number = 140;
+  readonly pickerHeight: number = 435;
 
   public editorLeftOffset: number = 0; // account for editors with reduced width
 
