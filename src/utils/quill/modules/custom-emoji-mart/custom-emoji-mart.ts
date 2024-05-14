@@ -3,7 +3,7 @@ import * as EmojiMart from "emoji-mart";
 import round from "lodash/round";
 import Quill, { Delta, QuillOptions, Range } from "quill/core";
 
-import { defaultRange } from "utils/consts";
+import { appBarHeight, defaultRange } from "utils/consts";
 import { pickerClassName } from "utils/quill/modules/custom-emoji-mart/consts";
 
 export class CustomEmojiMart {
@@ -74,7 +74,7 @@ export class CustomEmojiMart {
     pickerNode.className = pickerClassName;
     pickerNode.style.display = "none";
     pickerNode.style.width = `${this.pickerWidth}px`;
-    pickerNode.style.height = `${this.pickerHeight}px`;
+    pickerNode.style.height = `${round(window.innerHeight / 2) - appBarHeight}px`;
     this.quill.container.appendChild(pickerNode);
     return pickerNode;
   }
@@ -92,12 +92,13 @@ export class CustomEmojiMart {
   }
 
   setPickerPosition() {
-    const editorWidth = this.quill.root.offsetWidth;
+    const targetWidth = this.quill.root.offsetWidth;
+    const targetHeight = round(window.innerHeight) - appBarHeight;
     const bounds = this.getBounds();
     const editorRect = this.quill.root.getBoundingClientRect();
     const parsedHeight = this.getParsedPickerHeight();
 
-    if (editorWidth < bounds.left + this.pickerWidth - this.pickerWidthOffset - this.editorLeftOffset) {
+    if (targetWidth < bounds.left + this.pickerWidth - this.pickerWidthOffset - this.editorLeftOffset) {
       this.pickerLeft = bounds.left - this.pickerWidth;
     } else {
       this.pickerLeft = bounds.left;
@@ -108,7 +109,7 @@ export class CustomEmojiMart {
 
     const bottom = round(bounds.top + editorRect.top + parsedHeight);
 
-    if (bottom > window.innerHeight) {
+    if (bottom > targetHeight) {
       this.pickerTop = bounds.top - this.pickerBottomOffset - parsedHeight;
     } else {
       this.pickerTop = bounds.top + this.pickerTopOffset;
@@ -131,7 +132,7 @@ export class CustomEmojiMart {
     }
     button.addEventListener("click", () => {
       const maxWidth = this.quill.root.offsetWidth;
-      const maxHeight = round(window.innerHeight / 2);
+      const maxHeight = round(window.innerHeight / 2) - appBarHeight;
       const parsedWidth = this.getParsedPickerWidth();
       const parsedHeight = this.getParsedPickerHeight();
 
