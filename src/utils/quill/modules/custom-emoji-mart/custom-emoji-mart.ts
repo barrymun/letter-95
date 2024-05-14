@@ -1,8 +1,9 @@
 import emojiData from "@emoji-mart/data";
 import * as EmojiMart from "emoji-mart";
+import round from "lodash/round";
 import Quill, { Delta, QuillOptions, Range } from "quill/core";
 
-import { appBarHeight, defaultRange } from "utils/consts";
+import { defaultRange } from "utils/consts";
 import { pickerClassName } from "utils/quill/modules/custom-emoji-mart/consts";
 
 export class CustomEmojiMart {
@@ -20,7 +21,7 @@ export class CustomEmojiMart {
 
   protected quill: Quill;
 
-  protected picker: HTMLDivElement;
+  protected picker: HTMLElement;
 
   protected pickerLeft: number = 0;
 
@@ -33,6 +34,8 @@ export class CustomEmojiMart {
     this.handleEmojiSelect = this.handleEmojiSelect.bind(this);
     this.createPicker = this.createPicker.bind(this);
     this.getBounds = this.getBounds.bind(this);
+    this.getParsedPickerWidth = this.getParsedPickerWidth.bind(this);
+    this.getParsedPickerHeight = this.getParsedPickerHeight.bind(this);
     this.setPickerPosition = this.setPickerPosition.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
     this.addToolbarButtonClickHandler = this.addToolbarButtonClickHandler.bind(this);
@@ -59,42 +62,54 @@ export class CustomEmojiMart {
   }
 
   createPicker() {
+    const maxWidth = this.quill.root.offsetWidth;
     const pickerOptions = {
       theme: "light",
       previewPosition: "none",
       data: emojiData,
       onEmojiSelect: this.handleEmojiSelect.bind(this),
+      dynamicWidth: this.pickerWidth > maxWidth,
     };
-    const pickerNode = new EmojiMart.Picker(pickerOptions);
-    const div = document.createElement("div");
-    div.className = pickerClassName;
-    div.style.display = "none";
-    div.style.width = `${this.pickerWidth}px`;
-    div.style.height = `${this.pickerHeight}px`;
-    div.appendChild(pickerNode as unknown as Node);
-    this.quill.container.appendChild(div);
-    return div;
+    const pickerNode = new EmojiMart.Picker(pickerOptions) as unknown as HTMLElement;
+    pickerNode.className = pickerClassName;
+    pickerNode.style.display = "none";
+    pickerNode.style.width = `${this.pickerWidth}px`;
+    pickerNode.style.height = `${this.pickerHeight}px`;
+    this.quill.container.appendChild(pickerNode);
+    return pickerNode;
   }
 
   getBounds() {
     return this.quill.getBounds(this.quill.getSelection() ?? 0)!;
   }
 
+  getParsedPickerWidth() {
+    return round(parseInt(this.picker.style.width.replace("px", ""), 10));
+  }
+
+  getParsedPickerHeight() {
+    return round(parseInt(this.picker.style.height.replace("px", ""), 10));
+  }
+
   setPickerPosition() {
     const editorWidth = this.quill.root.offsetWidth;
     const bounds = this.getBounds();
     const editorRect = this.quill.root.getBoundingClientRect();
+    const parsedHeight = this.getParsedPickerHeight();
 
     if (editorWidth < bounds.left + this.pickerWidth - this.pickerWidthOffset - this.editorLeftOffset) {
       this.pickerLeft = bounds.left - this.pickerWidth;
     } else {
       this.pickerLeft = bounds.left;
     }
+    if (this.pickerLeft < 0) {
+      this.pickerLeft = 0;
+    }
 
-    const bottom = bounds.top + editorRect.top + this.pickerHeight + appBarHeight;
+    const bottom = round(bounds.top + editorRect.top + parsedHeight);
 
     if (bottom > window.innerHeight) {
-      this.pickerTop = bounds.top - this.pickerHeight - this.pickerBottomOffset;
+      this.pickerTop = bounds.top - this.pickerBottomOffset - parsedHeight;
     } else {
       this.pickerTop = bounds.top + this.pickerTopOffset;
     }
@@ -115,10 +130,27 @@ export class CustomEmojiMart {
       throw new Error("Please ensure that the emoji button is present in the toolbar");
     }
     button.addEventListener("click", () => {
+      const maxWidth = this.quill.root.offsetWidth;
+      const maxHeight = round(window.innerHeight / 2);
+      const parsedWidth = this.getParsedPickerWidth();
+      const parsedHeight = this.getParsedPickerHeight();
+
       this.currentRange = this.quill.getSelection() ?? defaultRange;
       this.setPickerPosition();
       this.picker.style.left = `${this.pickerLeft}px`;
       this.picker.style.top = `${this.pickerTop}px`;
+      // ensure the picker does not exceed the width of the editor
+      if (parsedWidth >= maxWidth) {
+        this.picker.style.width = `${maxWidth}px`;
+      } else {
+        this.picker.style.width = `${this.pickerWidth}px`;
+      }
+      // ensure the picker does not exceed half the height of the viewport
+      if (parsedHeight >= maxHeight) {
+        this.picker.style.height = `${maxHeight}px`;
+      } else {
+        this.picker.style.height = `${this.pickerHeight}px`;
+      }
       this.picker.style.display = this.picker.style.display === "none" ? "block" : "none";
     });
   }

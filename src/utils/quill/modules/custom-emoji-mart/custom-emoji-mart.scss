@@ -1,5 +1,9 @@
+@import '/src/assets/scss/variables';
+
 .custom-emoji-mart {
   position: absolute;
   z-index: 1;
   display: block;
+  overflow-y: auto;
+  background-color: $surface-primary;
 }
