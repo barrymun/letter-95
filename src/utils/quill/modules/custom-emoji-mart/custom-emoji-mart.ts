@@ -52,6 +52,13 @@ export class CustomEmojiMart {
 
   hidePicker() {
     this.picker.style.display = "none";
+    // reset picker options if there were previous search results
+    const pickerClearButton = this.picker.shadowRoot?.querySelector(
+      "button[title='Clear']",
+    ) as HTMLButtonElement | null;
+    if (pickerClearButton) {
+      pickerClearButton.click();
+    }
   }
 
   handleEmojiSelect(emoji: { native: string }) {
