@@ -4,7 +4,7 @@ import round from "lodash/round";
 import Quill, { Delta, QuillOptions, Range } from "quill/core";
 
 import { appBarHeight, defaultRange } from "utils/consts";
-import { pickerClassName } from "utils/quill/modules/custom-emoji-mart/consts";
+import { pickerClassName, pickerTagName } from "utils/quill/modules/custom-emoji-mart/consts";
 
 export class CustomEmojiMart {
   readonly pickerTopOffset: number = 34;
@@ -163,7 +163,7 @@ export class CustomEmojiMart {
       return;
     }
     // hide the picker if it is shown and the user clicks outside of it
-    if (target.tagName !== "EM-EMOJI-PICKER") {
+    if (target.tagName !== pickerTagName) {
       this.hidePicker();
     }
   }
