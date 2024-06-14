@@ -41,8 +41,8 @@ const CustomToolbar = forwardRef((_props: CustomToolbarProps, ref: ForwardedRef<
       </span>
       {/* TODO: */}
       <span className="ql-formats">
-        <button type="button" className="ql-background" />
-        <button type="button" className="ql-color" />
+        <select className="ql-background" />
+        <select className="ql-color" />
       </span>
       <span className="ql-formats">
         <button type="button" className="ql-link" />
