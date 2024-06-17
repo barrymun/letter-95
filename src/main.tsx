@@ -6,15 +6,25 @@ import "utils/quill/modules/custom-emoji-mart/custom-emoji-mart.scss";
 
 import emojiData from "@emoji-mart/data";
 import { init } from "emoji-mart";
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
+import original from "react95/dist/themes/original";
+import { ThemeProvider } from "styled-components";
 
-import { App } from "components/app";
+const App = lazy(() => import("components/app"));
+const GlobalStyles = lazy(() => import("components/global-styles"));
 
 init({ data: emojiData });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <Suspense>
+      <GlobalStyles />
+    </Suspense>
+    <ThemeProvider theme={original}>
+      <Suspense>
+        <App />
+      </Suspense>
+    </ThemeProvider>
   </React.StrictMode>,
 );
