@@ -1,5 +1,10 @@
 @import '/src/assets/scss/variables';
 
 .custom-toolbar {
+  position: fixed;
+  top: $app-bar-height;
+  margin: 8px 15px;
+  width: calc(100% - 30px);
+  z-index: 1;
   background-color: $surface-primary;
 }

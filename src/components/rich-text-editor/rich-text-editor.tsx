@@ -9,7 +9,7 @@ import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
-import { FC, Suspense, lazy, useEffect, useRef, useState } from "react";
+import { FC, Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
 
 import { extractMentionedUsers } from "utils";
 import { CustomEmoji } from "utils/quill/modules/custom-emoji";
@@ -63,6 +63,17 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   const [quill, setQuill] = useState<Quill | null>(null);
+
+  /**
+   * adjust the editor's margin top to account for the toolbar's height
+   */
+  const handleResize = useCallback(() => {
+    if (!editorRef?.current || !toolbarRef?.current) {
+      return;
+    }
+    const toolbarHeight = toolbarRef.current.offsetHeight;
+    editorRef.current.style.marginTop = `${toolbarHeight}px`;
+  }, []);
 
   useEffect(() => {
     if (!editorRef?.current) {
@@ -162,13 +173,26 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     }));
   }, [quill]);
 
+  useEffect(() => {
+    handleResize();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
+
   return (
-    <div className="rich-text-editor">
+    <>
       <Suspense>
         <CustomToolbar ref={toolbarRef} />
       </Suspense>
-      <div ref={editorRef} />
-    </div>
+      <div className="rich-text-editor">
+        <div ref={editorRef} />
+      </div>
+    </>
   );
 };
 

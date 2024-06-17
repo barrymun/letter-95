@@ -132,8 +132,8 @@ export class CustomEmojiMart {
     }, 10);
   }
 
-  addToolbarButtonClickHandler() {
-    const button = this.quill.container.parentElement!.querySelector(".ql-emoji") as HTMLButtonElement | null;
+  async addToolbarButtonClickHandler() {
+    const button = document.querySelector(".ql-emoji") as HTMLButtonElement | null;
     if (!button) {
       throw new Error("Please ensure that the emoji button is present in the toolbar");
     }
