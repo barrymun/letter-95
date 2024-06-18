@@ -1,9 +1,9 @@
 import "./app-bar.scss";
 
-import html2canvas from "html2canvas";
-import { jsPDF as JSPDF } from "jspdf";
 import { FC, useState } from "react";
 import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Toolbar } from "react95";
+
+import { downloadPdf } from "utils";
 
 interface AppBarProps {}
 
@@ -15,14 +15,7 @@ const AppBar: FC<AppBarProps> = () => {
     if (!element) {
       return;
     }
-    const canvas = await html2canvas(element as HTMLElement);
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new JSPDF();
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("document.pdf");
+    downloadPdf(element as HTMLElement);
     setIsOpen(false);
   };
 
