@@ -1,26 +1,55 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { Delta } from "quill/core";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
+import { useLocalStorage } from "hooks/use-local-storage";
+import { LocalStorageKeys } from "utils";
 
 interface EditorProviderProps {
   children: React.ReactNode;
 }
 
 const EditorContext = createContext({
-  editorHTML: "",
-  setEditorHTML: (_: string) => {},
+  editorDelta: new Delta(),
+  setEditorDelta: (_: Delta) => {},
 });
 
 const EditorProvider = ({ children }: EditorProviderProps) => {
-  const [editorHTML, setEditorHTML] = useState<string>("");
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [editorDelta, setEditorDelta] = useState<Delta>(new Delta());
+
+  const { getValue, setValue } = useLocalStorage();
 
   const value = useMemo(
     () => ({
-      editorHTML,
-      setEditorHTML,
+      editorDelta,
+      setEditorDelta,
     }),
-    [editorHTML, setEditorHTML],
+    [editorDelta, setEditorDelta],
   );
 
-  return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
+  /**
+   * save editor delta to local storage on delta change
+   */
+  useEffect(() => {
+    if (!isLoaded) {
+      return;
+    }
+    setValue(LocalStorageKeys.EditorDelta, JSON.stringify(editorDelta));
+  }, [isLoaded, editorDelta]);
+
+  /**
+   * load editor delta from local storage (if available)
+   */
+  useEffect(() => {
+    const storedEditorDelta = getValue(LocalStorageKeys.EditorDelta);
+    if (!storedEditorDelta) {
+      return;
+    }
+    setEditorDelta(new Delta(JSON.parse(storedEditorDelta)));
+    setIsLoaded(true);
+  }, []);
+
+  return <EditorContext.Provider value={value}>{isLoaded ? children : null}</EditorContext.Provider>;
 };
 
 const useEditor = () => useContext(EditorContext);

@@ -4,6 +4,7 @@ import emojiData, { EmojiMartData } from "@emoji-mart/data";
 import omit from "lodash/omit";
 import QuillBlock from "quill/blots/block";
 import Quill, { Delta, EmitterSource, Op } from "quill/core";
+import Emitter from "quill/core/emitter";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
@@ -65,7 +66,7 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
 
   const [quill, setQuill] = useState<Quill | null>(null);
 
-  const { setEditorHTML } = useEditor();
+  const { editorDelta, setEditorDelta } = useEditor();
 
   /**
    * adjust the editor's margin top to account for the toolbar's height
@@ -83,11 +84,8 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
       if (!quill) {
         return;
       }
-      let html = quill.root.innerHTML;
-      if (html === "<div><br></div>") {
-        html = "";
-      }
-      setEditorHTML(html);
+
+      setEditorDelta(quill.getContents());
     },
     [quill],
   );
@@ -213,6 +211,16 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     return () => {
       quill.off("text-change", handleTextChange);
     };
+  }, [quill]);
+
+  /**
+   * set the editor's content on load
+   */
+  useEffect(() => {
+    if (!quill) {
+      return;
+    }
+    quill.setContents(editorDelta, Emitter.sources.SILENT);
   }, [quill]);
 
   return (

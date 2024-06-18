@@ -3,20 +3,13 @@ import "./app-bar.scss";
 import { FC, useState } from "react";
 import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Toolbar } from "react95";
 
-import { useEditor, useLocalStorage } from "hooks";
-import { LocalStorageKeys } from "utils";
-
 interface AppBarProps {}
 
 const AppBar: FC<AppBarProps> = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { editorHTML } = useEditor();
-  const { setValue } = useLocalStorage();
-
   const handleSave = () => {
     setIsOpen(false);
-    setValue(LocalStorageKeys.EditorHTML, editorHTML);
   };
 
   return (
@@ -35,7 +28,7 @@ const AppBar: FC<AppBarProps> = () => {
                   left: 0,
                 }}
               >
-                <MenuListItem onClick={handleSave}>Save</MenuListItem>
+                <MenuListItem onClick={handleSave}>Download as PDF</MenuListItem>
               </MenuList>
             )}
           </div>

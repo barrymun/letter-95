@@ -1,3 +1,3 @@
 export enum LocalStorageKeys {
-  EditorHTML = "editorHTML",
+  EditorDelta = "editorDelta",
 }
