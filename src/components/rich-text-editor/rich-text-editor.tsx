@@ -3,7 +3,7 @@ import "./rich-text-editor.scss";
 import emojiData, { EmojiMartData } from "@emoji-mart/data";
 import omit from "lodash/omit";
 import QuillBlock from "quill/blots/block";
-import Quill, { Delta, Op } from "quill/core";
+import Quill, { Delta, EmitterSource, Op } from "quill/core";
 import Bold from "quill/formats/bold";
 import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
@@ -11,6 +11,7 @@ import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
 import { FC, Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
 
+import { useEditor } from "hooks";
 import { extractMentionedUsers } from "utils";
 import { CustomEmoji } from "utils/quill/modules/custom-emoji";
 import { CustomEmojiMart } from "utils/quill/modules/custom-emoji-mart";
@@ -64,6 +65,8 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
 
   const [quill, setQuill] = useState<Quill | null>(null);
 
+  const { setEditorHTML } = useEditor();
+
   /**
    * adjust the editor's margin top to account for the toolbar's height
    */
@@ -74,6 +77,20 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     const toolbarHeight = toolbarRef.current.offsetHeight;
     editorRef.current.style.marginTop = `${toolbarHeight}px`;
   }, []);
+
+  const handleTextChange = useCallback(
+    (_delta: Delta, _oldDelta: Delta, _source: EmitterSource) => {
+      if (!quill) {
+        return;
+      }
+      let html = quill.root.innerHTML;
+      if (html === "<div><br></div>") {
+        html = "";
+      }
+      setEditorHTML(html);
+    },
+    [quill],
+  );
 
   useEffect(() => {
     if (!editorRef?.current) {
@@ -173,6 +190,9 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     }));
   }, [quill]);
 
+  /**
+   * ensure correct sizing on load
+   */
   useEffect(() => {
     handleResize();
   }, []);
@@ -183,6 +203,17 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [handleResize]);
+
+  useEffect(() => {
+    if (!quill) {
+      return;
+    }
+    quill.on("text-change", handleTextChange);
+    // eslint-disable-next-line consistent-return
+    return () => {
+      quill.off("text-change", handleTextChange);
+    };
+  }, [quill]);
 
   return (
     <>

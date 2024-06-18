@@ -9,6 +9,8 @@ import ReactDOM from "react-dom/client";
 import original from "react95/dist/themes/original";
 import { ThemeProvider } from "styled-components";
 
+import { EditorProvider, LocalStorageProvider } from "hooks";
+
 const App = lazy(() => import("components/app"));
 const GlobalStyles = lazy(() => import("components/global-styles"));
 
@@ -18,9 +20,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <GlobalStyles />
     </Suspense>
     <ThemeProvider theme={original}>
-      <Suspense>
-        <App />
-      </Suspense>
+      <LocalStorageProvider>
+        <EditorProvider>
+          <Suspense>
+            <App />
+          </Suspense>
+        </EditorProvider>
+      </LocalStorageProvider>
     </ThemeProvider>
   </StrictMode>,
 );
