@@ -8,7 +8,8 @@ import { downloadPdf } from "utils";
 interface AppBarProps {}
 
 const AppBar: FC<AppBarProps> = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isFileOpen, setIsFileOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const handleSave = async () => {
     const element = document.querySelector(".ql-editor");
@@ -16,7 +17,7 @@ const AppBar: FC<AppBarProps> = () => {
       return;
     }
     downloadPdf(element as HTMLElement);
-    setIsOpen(false);
+    setIsFileOpen(false);
   };
 
   return (
@@ -24,10 +25,10 @@ const AppBar: FC<AppBarProps> = () => {
       <R95AppBar position="fixed">
         <Toolbar noPadding>
           <div style={{ position: "relative", display: "inline-block" }}>
-            <Button active={isOpen} onClick={() => setIsOpen(!isOpen)}>
+            <Button id="file-btn" active={isFileOpen} onClick={() => setIsFileOpen(!isFileOpen)}>
               File
             </Button>
-            {isOpen && (
+            {isFileOpen && (
               <MenuList
                 style={{
                   position: "absolute",
@@ -36,6 +37,20 @@ const AppBar: FC<AppBarProps> = () => {
                 }}
               >
                 <MenuListItem onClick={handleSave}>Download as PDF</MenuListItem>
+              </MenuList>
+            )}
+            <Button id="settings-btn" active={isSettingsOpen} onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
+              Settings
+            </Button>
+            {isSettingsOpen && (
+              <MenuList
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: document.getElementById("settings-btn")?.offsetLeft ?? 0,
+                }}
+              >
+                <MenuListItem>Change theme</MenuListItem>
               </MenuList>
             )}
           </div>
