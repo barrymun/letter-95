@@ -1,19 +1,19 @@
 import "./layout.scss";
 
 import { FC, useEffect } from "react";
-import { Theme } from "react95/dist/types";
-import { useTheme } from "styled-components";
+
+import { useTheme } from "hooks";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => {
-  const { desktopBackground } = useTheme() as Theme;
+  const { theme } = useTheme();
 
   useEffect(() => {
-    document.body.style.backgroundColor = desktopBackground;
-  }, []);
+    document.body.style.backgroundColor = theme.desktopBackground;
+  }, [theme]);
 
   return <div className="layout">{children}</div>;
 };

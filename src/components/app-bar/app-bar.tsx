@@ -1,13 +1,20 @@
 import "./app-bar.scss";
 
-import { FC, useState } from "react";
+import { FC, lazy, useState } from "react";
 import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Toolbar } from "react95";
+import themes from "react95/dist/themes";
 
+import { useTheme } from "hooks";
 import { downloadPdf } from "utils";
+
+const Dialog = lazy(() => import("components/dialog/dialog"));
 
 interface AppBarProps {}
 
 const AppBar: FC<AppBarProps> = () => {
+  const { setTheme } = useTheme();
+
+  const [showDialog, setShowDialog] = useState<boolean>(false);
   const [isFileOpen, setIsFileOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
@@ -18,6 +25,11 @@ const AppBar: FC<AppBarProps> = () => {
     }
     downloadPdf(element as HTMLElement);
     setIsFileOpen(false);
+  };
+
+  const handleChangeTheme = () => {
+    setIsSettingsOpen(false);
+    setShowDialog(true);
   };
 
   return (
@@ -50,12 +62,21 @@ const AppBar: FC<AppBarProps> = () => {
                   left: document.getElementById("settings-btn")?.offsetLeft ?? 0,
                 }}
               >
-                <MenuListItem>Change theme</MenuListItem>
+                <MenuListItem onClick={handleChangeTheme}>Change theme</MenuListItem>
               </MenuList>
             )}
           </div>
         </Toolbar>
       </R95AppBar>
+      <Dialog show={showDialog} setShow={setShowDialog} title="Select a theme">
+        {Object.entries(themes).map(([name, theme], index) => (
+          <div key={index} className="theme">
+            <Button onClick={() => setTheme(theme)} style={{ backgroundColor: theme.material }}>
+              {name}
+            </Button>
+          </div>
+        ))}
+      </Dialog>
     </div>
   );
 };
