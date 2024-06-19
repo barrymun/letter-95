@@ -3,6 +3,9 @@ import themes from "react95/dist/themes";
 import { Theme as R95Theme } from "react95/dist/types";
 import { ThemeProvider as R95ThemeProvider } from "styled-components";
 
+import { useLocalStorage } from "hooks/use-local-storage";
+import { LocalStorageKeys } from "utils";
+
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
@@ -13,7 +16,16 @@ const ThemeContext = createContext({
 });
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [theme, setTheme] = useState<R95Theme>(themes.original);
+  const { getValue } = useLocalStorage();
+
+  const [theme, setTheme] = useState<R95Theme>(() => {
+    try {
+      const storedTheme = getValue(LocalStorageKeys.Theme);
+      return storedTheme ? JSON.parse(storedTheme) : themes.original;
+    } catch (error) {
+      return themes.original;
+    }
+  });
 
   const value = useMemo(
     () => ({

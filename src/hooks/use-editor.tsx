@@ -45,7 +45,11 @@ const EditorProvider = ({ children }: EditorProviderProps) => {
     if (!storedEditorDelta) {
       return;
     }
-    setEditorDelta(new Delta(JSON.parse(storedEditorDelta)));
+    try {
+      setEditorDelta(new Delta(JSON.parse(storedEditorDelta)));
+    } catch (e) {
+      // no-op
+    }
     setIsLoaded(true);
   }, []);
 
