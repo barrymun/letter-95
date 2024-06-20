@@ -11,6 +11,7 @@ import { EditorProvider, LocalStorageProvider, ThemeProvider } from "hooks";
 
 const App = lazy(() => import("components/app"));
 const GlobalStyles = lazy(() => import("components/global-styles"));
+const Tutorial = lazy(() => import("components/tutorial/tutorial"));
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <EditorProvider>
           <Suspense>
             <App />
+            <Tutorial />
           </Suspense>
         </EditorProvider>
       </ThemeProvider>
