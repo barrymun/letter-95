@@ -8,6 +8,24 @@
     z-index: 2;
   }
 
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: inherit;
+
+    .github {
+      display: inherit;
+      justify-content: inherit;
+      align-items: inherit;
+      padding-right: 0.5em;
+    }
+
+    .github:hover {
+      cursor: pointer;
+    }
+  }
+
   .theme {
     margin-bottom: 4px;
   }

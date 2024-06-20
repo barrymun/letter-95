@@ -5,8 +5,9 @@ import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Toolbar } from "re
 import themes from "react95/dist/themes";
 import { Theme } from "react95/dist/types";
 
+import { GitHub } from "components/svgs";
 import { useLocalStorage, useTheme } from "hooks";
-import { LocalStorageKeys, downloadPdf } from "utils";
+import { LocalStorageKeys, downloadPdf, projectGitHubUrl } from "utils";
 
 const Dialog = lazy(() => import("components/dialog/dialog"));
 
@@ -40,10 +41,14 @@ const AppBar: FC<AppBarProps> = () => {
     setShowDialog(false);
   };
 
+  const linkToGitHub = () => {
+    window.open(projectGitHubUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="app-bar">
       <R95AppBar position="fixed">
-        <Toolbar noPadding>
+        <Toolbar noPadding className="toolbar">
           <div style={{ position: "relative", display: "inline-block" }}>
             <Button id="file-btn" active={isFileOpen} onClick={() => setIsFileOpen(!isFileOpen)}>
               File
@@ -73,6 +78,9 @@ const AppBar: FC<AppBarProps> = () => {
                 <MenuListItem onClick={handleChangeTheme}>Change theme</MenuListItem>
               </MenuList>
             )}
+          </div>
+          <div className="github" role="presentation" onClick={linkToGitHub}>
+            <GitHub width={24} />
           </div>
         </Toolbar>
       </R95AppBar>

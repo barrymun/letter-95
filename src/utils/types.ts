@@ -1,5 +1,5 @@
 export interface SvgProps {
-  width?: string;
-  height?: string;
+  width?: number;
+  height?: number;
   fill?: string;
 }
