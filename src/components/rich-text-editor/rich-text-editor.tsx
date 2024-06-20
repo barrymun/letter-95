@@ -66,7 +66,7 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
 
   const [quill, setQuill] = useState<Quill | null>(null);
 
-  const { editorDelta, setEditorDelta } = useEditor();
+  const { shouldClear, editorDelta, setShouldClear, setEditorDelta } = useEditor();
 
   /**
    * adjust the editor's margin top to account for the toolbar's height
@@ -212,6 +212,21 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
       quill.off("text-change", handleTextChange);
     };
   }, [quill]);
+
+  /**
+   * clear the editor's content
+   */
+  useEffect(() => {
+    if (!quill) {
+      return;
+    }
+    if (!shouldClear) {
+      return;
+    }
+    quill.setContents(new Delta(), Emitter.sources.USER);
+    setShouldClear(false);
+    quill.focus();
+  }, [shouldClear]);
 
   /**
    * set the editor's content on load

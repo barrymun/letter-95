@@ -1,12 +1,12 @@
 import "./app-bar.scss";
 
 import { FC, lazy, useState } from "react";
-import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Toolbar } from "react95";
+import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Separator, Toolbar } from "react95";
 import themes from "react95/dist/themes";
 import { Theme } from "react95/dist/types";
 
 import { GitHub } from "components/svgs";
-import { useLocalStorage, useTheme } from "hooks";
+import { useEditor, useLocalStorage, useTheme } from "hooks";
 import { LocalStorageKeys, downloadPdf, projectGitHubUrl } from "utils";
 
 const Dialog = lazy(() => import("components/dialog/dialog"));
@@ -16,10 +16,16 @@ interface AppBarProps {}
 const AppBar: FC<AppBarProps> = () => {
   const { setValue } = useLocalStorage();
   const { setTheme } = useTheme();
+  const { setShouldClear } = useEditor();
 
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [isFileOpen, setIsFileOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+
+  const handleClear = () => {
+    setShouldClear(true);
+    setIsFileOpen(false);
+  };
 
   const handleSave = async () => {
     const element = document.querySelector(".ql-editor");
@@ -61,6 +67,8 @@ const AppBar: FC<AppBarProps> = () => {
                   left: 0,
                 }}
               >
+                <MenuListItem onClick={handleClear}>Clear</MenuListItem>
+                <Separator />
                 <MenuListItem onClick={handleSave}>Download as PDF</MenuListItem>
               </MenuList>
             )}

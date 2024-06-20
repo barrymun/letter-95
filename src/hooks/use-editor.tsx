@@ -9,22 +9,27 @@ interface EditorProviderProps {
 }
 
 const EditorContext = createContext({
+  shouldClear: false,
   editorDelta: new Delta(),
+  setShouldClear: (_: boolean) => {},
   setEditorDelta: (_: Delta) => {},
 });
 
 const EditorProvider = ({ children }: EditorProviderProps) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [shouldClear, setShouldClear] = useState<boolean>(false);
   const [editorDelta, setEditorDelta] = useState<Delta>(new Delta());
 
   const { getValue, setValue } = useLocalStorage();
 
   const value = useMemo(
     () => ({
+      shouldClear,
       editorDelta,
+      setShouldClear,
       setEditorDelta,
     }),
-    [editorDelta, setEditorDelta],
+    [shouldClear, editorDelta, setShouldClear, setEditorDelta],
   );
 
   /**
