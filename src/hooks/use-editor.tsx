@@ -43,6 +43,7 @@ const EditorProvider = ({ children }: EditorProviderProps) => {
   useEffect(() => {
     const storedEditorDelta = getValue(LocalStorageKeys.EditorDelta);
     if (!storedEditorDelta) {
+      setIsLoaded(true);
       return;
     }
     try {
