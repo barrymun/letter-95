@@ -98,7 +98,7 @@ const AppBar: FC<AppBarProps> = () => {
             )}
           </div>
           <div className="github" role="presentation" onClick={linkToGitHub}>
-            <GitHub width={24} />
+            <GitHub />
           </div>
         </Toolbar>
       </R95AppBar>

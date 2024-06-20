@@ -3,6 +3,9 @@ import "./dialog.scss";
 import { FC, useEffect, useRef } from "react";
 import { Button, ScrollView, Window, WindowContent } from "react95";
 
+import { Close } from "components/svgs";
+import { useTheme } from "hooks";
+
 interface DialogProps {
   show: boolean;
   setShow: (_: boolean) => void;
@@ -12,6 +15,8 @@ interface DialogProps {
 
 const Dialog: FC<DialogProps> = (props) => {
   const { show, setShow, title, children } = props;
+
+  const { theme } = useTheme();
 
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -62,8 +67,12 @@ const Dialog: FC<DialogProps> = (props) => {
           <div className="root">
             <div className="title">
               {title}
-              <Button className="close" onClick={hideDialog}>
-                Close
+              <Button
+                className="close"
+                style={{ backgroundColor: theme.material, color: theme.materialText }}
+                onClick={hideDialog}
+              >
+                <Close width={12} />
               </Button>
             </div>
             <ScrollView className="body">{children}</ScrollView>
