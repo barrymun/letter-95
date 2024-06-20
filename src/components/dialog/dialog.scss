@@ -1,9 +1,11 @@
+@import '/src/assets/scss/variables';
+
 .dialog {
   padding: 0;
   max-height: 60vh;
 
   .root {
-    background-color: white;
+    background-color: $surface-primary;
     min-width: 300px;
     padding: 0 1em;
 
