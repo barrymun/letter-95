@@ -1,7 +1,7 @@
 import "./dialog.scss";
 
 import { FC, useEffect, useRef } from "react";
-import { Button } from "react95";
+import { Button, ScrollView, Window, WindowContent } from "react95";
 
 interface DialogProps {
   show: boolean;
@@ -57,15 +57,19 @@ const Dialog: FC<DialogProps> = (props) => {
 
   return (
     <dialog className="dialog" ref={dialogRef}>
-      <div className="root">
-        <div className="title">
-          {title}
-          <Button className="close" onClick={hideDialog}>
-            Close
-          </Button>
-        </div>
-        <div className="body">{children}</div>
-      </div>
+      <Window>
+        <WindowContent>
+          <div className="root">
+            <div className="title">
+              {title}
+              <Button className="close" onClick={hideDialog}>
+                Close
+              </Button>
+            </div>
+            <ScrollView className="body">{children}</ScrollView>
+          </div>
+        </WindowContent>
+      </Window>
     </dialog>
   );
 };

@@ -3,18 +3,16 @@
 .dialog {
   padding: 0;
   max-height: 60vh;
+  overflow-y: hidden;
 
   .root {
     background-color: $surface-primary;
     min-width: 300px;
-    padding: 0 1em;
 
     .title {
       background-color: inherit;
       min-width: inherit;
-      padding: 0.5em 0;
-      position: fixed;
-      z-index: 1;
+      padding: 0.2em 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -27,11 +25,10 @@
     .body::before {
       content: '';
       display: block;
-      height: 3.5em;
     }
-  
+
     .body {
-      overflow-y: scroll;
+      height: 50vh;
     }
   }
 }

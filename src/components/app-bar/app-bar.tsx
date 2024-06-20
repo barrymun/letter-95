@@ -22,6 +22,16 @@ const AppBar: FC<AppBarProps> = () => {
   const [isFileOpen, setIsFileOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
+  const handleToggleFile = () => {
+    setIsSettingsOpen(false);
+    setIsFileOpen(!isFileOpen);
+  };
+
+  const handleToggleSettings = () => {
+    setIsFileOpen(false);
+    setIsSettingsOpen(!isSettingsOpen);
+  };
+
   const handleClear = () => {
     setShouldClear(true);
     setIsFileOpen(false);
@@ -56,7 +66,7 @@ const AppBar: FC<AppBarProps> = () => {
       <R95AppBar position="fixed">
         <Toolbar noPadding className="toolbar">
           <div style={{ position: "relative", display: "inline-block" }}>
-            <Button id="file-btn" active={isFileOpen} onClick={() => setIsFileOpen(!isFileOpen)}>
+            <Button id="file-btn" active={isFileOpen} onClick={handleToggleFile}>
               File
             </Button>
             {isFileOpen && (
@@ -72,7 +82,7 @@ const AppBar: FC<AppBarProps> = () => {
                 <MenuListItem onClick={handleSave}>Download as PDF</MenuListItem>
               </MenuList>
             )}
-            <Button id="settings-btn" active={isSettingsOpen} onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
+            <Button id="settings-btn" active={isSettingsOpen} onClick={handleToggleSettings}>
               Settings
             </Button>
             {isSettingsOpen && (
