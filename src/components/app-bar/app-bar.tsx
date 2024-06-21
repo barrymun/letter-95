@@ -1,6 +1,6 @@
 import "./app-bar.scss";
 
-import { FC, lazy, useState } from "react";
+import { FC, lazy, useEffect, useState } from "react";
 import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Separator, Toolbar } from "react95";
 import themes from "react95/dist/themes";
 import { Theme } from "react95/dist/types";
@@ -60,6 +60,23 @@ const AppBar: FC<AppBarProps> = () => {
   const linkToGitHub = () => {
     window.open(projectGitHubUrl, "_blank", "noopener,noreferrer");
   };
+
+  const handleKeyUp = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setIsFileOpen(false);
+      setIsSettingsOpen(false);
+    }
+  };
+
+  /**
+   * close any menus when the user presses the escape key
+   */
+  useEffect(() => {
+    window.addEventListener("keyup", handleKeyUp);
+    return () => {
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
 
   return (
     <div className="app-bar">
