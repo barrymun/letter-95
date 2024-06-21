@@ -1,0 +1,14 @@
+{
+  "app-bar": {
+    "file": {
+      "title": "File",
+      "clear": "Clear",
+      "download-as-pdf": "Download as PDF"
+    },
+    "settings": {
+      "title": "Settings",
+      "select-a-theme": "Select a theme",
+      "change-theme": "Change theme"
+    }
+  }
+}

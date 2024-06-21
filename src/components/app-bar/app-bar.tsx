@@ -1,6 +1,7 @@
 import "./app-bar.scss";
 
 import { FC, lazy, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, MenuList, MenuListItem, AppBar as R95AppBar, Separator, Toolbar } from "react95";
 import themes from "react95/dist/themes";
 import { Theme } from "react95/dist/types";
@@ -14,6 +15,8 @@ const Dialog = lazy(() => import("components/dialog/dialog"));
 interface AppBarProps {}
 
 const AppBar: FC<AppBarProps> = () => {
+  const { t } = useTranslation();
+
   const { setValue } = useLocalStorage();
   const { setTheme } = useTheme();
   const { setShouldClear } = useEditor();
@@ -84,7 +87,7 @@ const AppBar: FC<AppBarProps> = () => {
         <Toolbar noPadding className="toolbar">
           <div style={{ position: "relative", display: "inline-block" }}>
             <Button id="file-btn" active={isFileOpen} onClick={handleToggleFile}>
-              File
+              {t("app-bar.file.title")}
             </Button>
             {isFileOpen && (
               <MenuList
@@ -94,13 +97,13 @@ const AppBar: FC<AppBarProps> = () => {
                   left: 0,
                 }}
               >
-                <MenuListItem onClick={handleClear}>Clear</MenuListItem>
+                <MenuListItem onClick={handleClear}>{t("app-bar.file.clear")}</MenuListItem>
                 <Separator />
-                <MenuListItem onClick={handleSave}>Download as PDF</MenuListItem>
+                <MenuListItem onClick={handleSave}>{t("app-bar.file.download-as-pdf")}</MenuListItem>
               </MenuList>
             )}
             <Button id="settings-btn" active={isSettingsOpen} onClick={handleToggleSettings}>
-              Settings
+              {t("app-bar.settings.title")}
             </Button>
             {isSettingsOpen && (
               <MenuList
@@ -110,7 +113,7 @@ const AppBar: FC<AppBarProps> = () => {
                   left: document.getElementById("settings-btn")?.offsetLeft ?? 0,
                 }}
               >
-                <MenuListItem onClick={handleChangeTheme}>Change theme</MenuListItem>
+                <MenuListItem onClick={handleChangeTheme}>{t("app-bar.settings.change-theme")}</MenuListItem>
               </MenuList>
             )}
           </div>
@@ -119,7 +122,7 @@ const AppBar: FC<AppBarProps> = () => {
           </div>
         </Toolbar>
       </R95AppBar>
-      <Dialog show={showDialog} setShow={setShowDialog} title="Select a theme">
+      <Dialog show={showDialog} setShow={setShowDialog} title={t("app-bar.settings.select-a-theme")}>
         {Object.entries(themes).map(([name, theme], index) => (
           <div key={index} className="theme">
             <Button onClick={handleClick(theme)} style={{ backgroundColor: theme.material, color: theme.materialText }}>
