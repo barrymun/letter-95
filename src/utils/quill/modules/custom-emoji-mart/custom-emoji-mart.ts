@@ -135,7 +135,12 @@ export class CustomEmojiMart {
   async addToolbarButtonClickHandler() {
     const button = document.querySelector(".ql-emoji") as HTMLButtonElement | null;
     if (!button) {
-      throw new Error("Please ensure that the emoji button is present in the toolbar");
+      // retry until the button is available
+      await new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
+      this.addToolbarButtonClickHandler();
+      return;
     }
     button.addEventListener("click", () => {
       const maxWidth = this.quill.root.offsetWidth;
