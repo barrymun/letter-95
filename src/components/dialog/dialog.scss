@@ -5,30 +5,43 @@
   max-height: 60vh;
   overflow-y: hidden;
 
-  .root {
-    background-color: $surface-primary;
-    min-width: 300px;
+  .window {
+    position: fixed;
+    top: calc(50% - 30vh);
+    left: calc(50% - 150px);
 
-    .title {
-      background-color: inherit;
-      min-width: inherit;
-      padding: 0.2em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .window-content {
+      padding-top: 0;
+
+      .root {
+        min-width: 300px;
+    
+        .title {
+          min-width: inherit;
+          padding: 0.2em;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          user-select: none;
+      
+          .close:hover {
+            cursor: pointer;
+          }
+        }
   
-      .close:hover {
-        cursor: pointer;
+        .title:hover {
+          cursor: move;
+        }
+    
+        .body::before {
+          content: '';
+          display: block;
+        }
+    
+        .body {
+          height: 50vh;
+        }
       }
-    }
-
-    .body::before {
-      content: '';
-      display: block;
-    }
-
-    .body {
-      height: 50vh;
     }
   }
 }
