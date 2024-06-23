@@ -12,7 +12,7 @@ import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
 import { FC, Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
 
-import { useEditor } from "hooks";
+import { useEditor, useTheme } from "hooks";
 import { extractMentionedUsers } from "utils";
 import { CustomEmoji } from "utils/quill/modules/custom-emoji";
 import { CustomEmojiMart } from "utils/quill/modules/custom-emoji-mart";
@@ -61,6 +61,8 @@ const mentionData = [
 interface RichTextEditorProps {}
 
 const RichTextEditor: FC<RichTextEditorProps> = () => {
+  const { theme } = useTheme();
+
   const toolbarRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
 
@@ -89,6 +91,40 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     },
     [quill],
   );
+
+  const updateThemeDeps = useCallback(() => {
+    if (!toolbarRef) {
+      return;
+    }
+    const buttons = toolbarRef.current?.querySelectorAll("button");
+    if (!buttons) {
+      return;
+    }
+    Array.from(buttons).forEach((button) => {
+      if (
+        button.classList.contains("ql-picker") ||
+        button.classList.contains("ql-link") ||
+        button.classList.contains("ql-image") ||
+        button.classList.contains("ql-emoji")
+      ) {
+        return;
+      }
+
+      // change the path stroke color within the button
+      const paths = button.querySelectorAll("path");
+      Array.from(paths).forEach((path) => {
+        // eslint-disable-next-line no-param-reassign
+        path.style.stroke = theme.materialText;
+      });
+
+      // change the line stroke color within the button
+      const lines = button.querySelectorAll("line");
+      Array.from(lines).forEach((line) => {
+        // eslint-disable-next-line no-param-reassign
+        line.style.stroke = theme.materialText;
+      });
+    });
+  }, [toolbarRef, theme]);
 
   useEffect(() => {
     if (!editorRef?.current) {
@@ -237,6 +273,10 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
     }
     quill.setContents(editorDelta, Emitter.sources.SILENT);
   }, [quill]);
+
+  useEffect(() => {
+    updateThemeDeps();
+  }, [theme]);
 
   return (
     <>
