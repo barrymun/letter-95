@@ -2,7 +2,7 @@
 
 Document editing web app written in TypeScript using the React and React95 libraries.
 
-![example](screenshots/example.png)
+![example](screenshots/example-v2.png)
 
 ## Getting Started
 
