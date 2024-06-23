@@ -1,7 +1,7 @@
 import "./dialog.scss";
 
 import { FC, useEffect, useRef } from "react";
-import { ScrollView, Window, WindowContent } from "react95";
+import { ScrollView, Window, WindowContent, WindowHeader } from "react95";
 
 import { CloseButton } from "components/presentational";
 
@@ -38,31 +38,37 @@ const Dialog: FC<DialogProps> = (props) => {
     setShow(false);
   };
 
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
+  const handleKeyUp = (event: KeyboardEvent) => {
+    if (event.key === "Escape") {
       hideDialog();
     }
   };
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     // ignore right click
-    if (e.button === 2) {
+    if (event.button === 2) {
+      return;
+    }
+    // do not drag if the user is attempting to drag using the close button
+    // also hide the dialog
+    if (!(event.target as HTMLElement).classList.contains("title")) {
+      hideDialog();
       return;
     }
     canDrag = true;
     if (dialogWindowRef.current) {
       const rect = dialogWindowRef.current.getBoundingClientRect();
-      topOffset = rect.top - e.clientY;
-      leftOffset = rect.left - e.clientX;
+      topOffset = rect.top - event.clientY;
+      leftOffset = rect.left - event.clientX;
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = (event: MouseEvent) => {
     if (!canDrag) {
       return;
     }
-    const x = e.clientX;
-    const y = e.clientY;
+    const x = event.clientX;
+    const y = event.clientY;
     if (dialogWindowRef.current) {
       dialogWindowRef.current.style.left = `${x + leftOffset}px`;
       dialogWindowRef.current.style.top = `${y + topOffset}px`;
@@ -114,12 +120,12 @@ const Dialog: FC<DialogProps> = (props) => {
   return (
     <dialog className="dialog" ref={dialogRef}>
       <Window className="window" ref={dialogWindowRef}>
+        <WindowHeader className="title" onMouseDown={handleMouseDown} onContextMenu={() => false}>
+          {title}
+          <CloseButton onClick={hideDialog} />
+        </WindowHeader>
         <WindowContent className="window-content">
           <div className="root">
-            <div className="title" role="presentation" onMouseDown={handleMouseDown} onContextMenu={() => false}>
-              {title}
-              <CloseButton onClick={hideDialog} />
-            </div>
             <ScrollView className="body">{children}</ScrollView>
           </div>
         </WindowContent>

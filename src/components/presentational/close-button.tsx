@@ -3,7 +3,6 @@ import "./presentational.scss";
 import { FC } from "react";
 import { Button } from "react95";
 
-import { Close } from "components/svgs";
 import { useTheme } from "hooks";
 
 interface InfoProps {
@@ -15,7 +14,7 @@ const CloseButton: FC<InfoProps> = ({ onClick }) => {
 
   return (
     <Button className="close" style={{ backgroundColor: theme.material, color: theme.materialText }} onClick={onClick}>
-      <Close width={12} />
+      x
     </Button>
   );
 };

@@ -64,8 +64,8 @@ const AppBar: FC<AppBarProps> = () => {
     window.open(projectGitHubUrl, "_blank", "noopener,noreferrer");
   };
 
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
+  const handleKeyUp = (event: KeyboardEvent) => {
+    if (event.key === "Escape") {
       setIsFileOpen(false);
       setIsSettingsOpen(false);
     }

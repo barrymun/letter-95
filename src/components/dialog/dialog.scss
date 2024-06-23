@@ -10,28 +10,21 @@
     top: calc(50% - 30vh);
     left: calc(50% - 150px);
 
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title:hover {
+      cursor: move;
+    }
+
     .window-content {
       padding-top: 0;
 
       .root {
         min-width: 300px;
-    
-        .title {
-          min-width: inherit;
-          padding: 0.2em;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          user-select: none;
-      
-          .close:hover {
-            cursor: pointer;
-          }
-        }
-  
-        .title:hover {
-          cursor: move;
-        }
     
         .body::before {
           content: '';

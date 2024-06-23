@@ -25,7 +25,6 @@ import Quill from "quill/core";
 import { ForwardedRef, forwardRef } from "react";
 import { renderToString } from "react-dom/server";
 
-import { Emoji } from "components/svgs";
 import { useTheme } from "hooks";
 import { SvgProps } from "utils";
 
@@ -96,9 +95,7 @@ const CustomToolbar = forwardRef((_props: CustomToolbarProps, ref: ForwardedRef<
         {/* <button type="button" className="ql-video" /> */}
       </span>
       <span className="ql-formats">
-        <button type="button" className="ql-emoji">
-          <Emoji />
-        </button>
+        <button type="button" className="ql-emoji" />
       </span>
     </div>
   );
