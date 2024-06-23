@@ -3,8 +3,26 @@
 .custom-toolbar {
   position: fixed;
   top: $app-bar-height;
-  margin: 8px 15px;
-  width: calc(100% - 30px);
+  width: 100%;
   z-index: 1;
-  background-color: $surface-primary;
+}
+
+.ql-toolbar.ql-snow {
+  border: 1px solid black;
+  border-radius: 2px;
+}
+
+.ql-toolbar.ql-snow .ql-formats {
+  margin-right: 4px;
+}
+
+.ql-snow.ql-toolbar button,
+.ql-snow .ql-color-picker {
+  border: 1px solid black;
+  border-radius: 2px;
+  box-shadow: inset 2px 2px 4px rgba(0 0 0 / 20%);
+}
+
+.ql-snow.ql-toolbar button.ql-active {
+  box-shadow: inset 2px 2px 4px rgba(0 0 0 / 80%);
 }

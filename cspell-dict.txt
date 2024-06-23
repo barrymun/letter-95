@@ -2,3 +2,7 @@ svgs
 fonticons
 fontawesome
 jspdf
+drvspace
+inetcpl
+progman
+underlne
