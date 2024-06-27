@@ -14,12 +14,14 @@ $menu-item-height: 45px;
   white-space: nowrap;
   font-size: 14px;
 
-  > div {
+  > button {
     padding: 2px 4px;
     height: $menu-item-height;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border: none;
+    background-color: inherit;
     // stylelint-disable-next-line declaration-no-important
     line-height: 18px !important;
 

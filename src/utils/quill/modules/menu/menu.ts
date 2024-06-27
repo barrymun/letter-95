@@ -181,20 +181,20 @@ export abstract class Menu {
     this.menu.innerHTML = "";
 
     for (const [index, datum] of filteredData.entries()) {
-      const div = document.createElement("div");
+      const button = document.createElement("button");
       if (datum.description) {
-        div.innerHTML = `
+        button.innerHTML = `
           <span class="label">${datum.label}</span>
           <span class="description">${datum.description}</span>
         `;
       } else {
-        div.innerText = datum.label;
+        button.innerText = datum.label;
       }
-      div.onclick = (event: MouseEvent | TouchEvent) => {
+      button.onclick = (event: MouseEvent | TouchEvent) => {
         event.preventDefault();
         this.insertItem(datum);
       };
-      div.onmouseenter = (event: MouseEvent) => {
+      button.onmouseenter = (event: MouseEvent) => {
         event.preventDefault();
         if (this.selectedIndex !== null) {
           (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.remove("active");
@@ -202,13 +202,13 @@ export abstract class Menu {
         this.selectedIndex = index;
         (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.add("active");
       };
-      div.onmouseleave = (event: MouseEvent) => {
+      button.onmouseleave = (event: MouseEvent) => {
         event.preventDefault();
         if (this.selectedIndex !== null) {
           (this.menu.childNodes[this.selectedIndex] as HTMLElement).classList.remove("active");
         }
       };
-      this.menu.appendChild(div);
+      this.menu.appendChild(button);
     }
 
     // highlight the first child in the array (if it exists)
