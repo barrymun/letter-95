@@ -22,6 +22,6 @@
 
     "baseUrl": "./src"
   },
-  "include": ["src", "@types", "vite.config.ts"],
+  "include": ["src", "@types"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

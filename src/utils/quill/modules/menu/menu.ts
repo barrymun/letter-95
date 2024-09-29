@@ -227,7 +227,7 @@ export abstract class Menu {
     try {
       const delta = this.quill.getContents(0, rangeIndex);
       let textBeforeCursor: string | object =
-        (delta?.ops && delta.ops.length) > 0 ? delta?.ops[delta.ops.length - 1]?.insert ?? "" : "";
+        (delta?.ops && delta.ops.length) > 0 ? (delta?.ops[delta.ops.length - 1]?.insert ?? "") : "";
       if (typeof textBeforeCursor === "object") {
         textBeforeCursor = "";
       }
