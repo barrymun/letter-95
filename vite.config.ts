@@ -5,12 +5,20 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      }
+    }
+  },
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          html2canvas: ["html2canvas"],
-          jspdf: ["jspdf"],
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return id.toString().split("node_modules/")[1].split("/")[0].toString();
+          }
         },
       },
     },
