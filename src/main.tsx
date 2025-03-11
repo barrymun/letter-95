@@ -5,7 +5,7 @@ import "utils/quill/modules/custom-emoji-mart/custom-emoji-mart.scss";
 import "index.scss";
 import "i18n/config";
 
-import { StrictMode, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 
 import { EditorProvider, LocalStorageProvider, ThemeProvider } from "hooks";
@@ -15,7 +15,8 @@ const GlobalStyles = lazy(() => import("components/global-styles"));
 const Tutorial = lazy(() => import("components/tutorial/tutorial"));
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  // <StrictMode>
+  <>
     <Suspense>
       <GlobalStyles />
     </Suspense>
@@ -29,5 +30,6 @@ createRoot(document.getElementById("root")!).render(
         </EditorProvider>
       </ThemeProvider>
     </LocalStorageProvider>
-  </StrictMode>,
+  </>,
+  // </StrictMode>,
 );

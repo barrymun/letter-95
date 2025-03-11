@@ -10,7 +10,7 @@ import Header from "quill/formats/header";
 import Italic from "quill/formats/italic";
 import Toolbar from "quill/modules/toolbar";
 import Snow from "quill/themes/snow";
-import { FC, Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { useEditor, useTheme } from "hooks";
 import { extractMentionedUsers } from "utils";
@@ -20,7 +20,7 @@ import { CustomTab } from "utils/quill/modules/custom-tab";
 import { Mention } from "utils/quill/modules/mention";
 import { MenuOption } from "utils/quill/modules/menu/types";
 
-const CustomToolbar = lazy(() => import("components/rich-text-editor/custom-toolbar"));
+import CustomToolbar from "./custom-toolbar";
 
 Quill.register({
   "themes/snow": Snow,
@@ -280,9 +280,7 @@ const RichTextEditor: FC<RichTextEditorProps> = () => {
 
   return (
     <>
-      <Suspense>
-        <CustomToolbar ref={toolbarRef} />
-      </Suspense>
+      <CustomToolbar ref={toolbarRef} />
       <div className="rich-text-editor">
         <div ref={editorRef} />
       </div>
